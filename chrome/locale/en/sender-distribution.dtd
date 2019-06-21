@@ -1,0 +1,27 @@
+<!ENTITY sndb.menu.label "Sender Distribution">
+<!ENTITY sndb.window.title "Sender Distribution">
+<!ENTITY sndb.condition.targetmail "Target Mail Address">
+
+<!ENTITY sndb.dstfolder.title "Distribution Folder">
+<!ENTITY sndb.dstfolder.directly "Inbox Directly">
+<!ENTITY sndb.dstfolder.currtime "Inbox/{SystemDate} Folder">
+
+<!ENTITY sndb.status.title "Condition">
+<!ENTITY sndb.status.unread "Unread">
+<!ENTITY sndb.status.read "Already Read">
+<!ENTITY sndb.status.all "All">
+
+<!ENTITY sndb.method.title "Distribution Method">
+<!ENTITY sndb.method.copy "Copy">
+<!ENTITY sndb.method.move "Move">
+
+<!ENTITY sndb.btn.prepare "Search">
+<!ENTITY sndb.btn.execute "Distribute">
+<!ENTITY sndb.btn.recount "Recalcurate">
+<!ENTITY sndb.btn.finish "Finish">
+
+<!ENTITY sndb.info.addrcount "Number of email addresses/Total number of emails">
+
+<!ENTITY sndb.detail.addr "Email Address">
+<!ENTITY sndb.detail.count "Number of emails">
+<!ENTITY sndb.detail.dstfolder "Distribution Folder">

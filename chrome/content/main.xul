@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="sender-distribution.css" type="text/css"?>
+
+<!DOCTYPE prefwindow SYSTEM "chrome://sender-distribution/locale/sender-distribution.dtd">
+
+<prefwindow
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	id="condition"
+	title="&sndb.window.title;"
+	buttons=","
+	ondialogaccept="checkCondition();"
+	onload="initScrCondition();"
+	onunload="resetProp();"
+	style="width: 750px; height: 520px;">
+
+	<prefpane id="firstpane">
+		<groupbox orient="vertical">
+			<hbox align="center">
+				<label value="&sndb.condition.targetmail;(&sndb.condition.pop3only;)"/>
+				<menulist id="inbox">
+					<menupopup>
+					</menupopup>
+				</menulist>
+				<spacer flex="1" />
+				<button type="button" id="bt_prepare" name="bt_prepare" value="1" oncommand="checkCondition()" label="&sndb.btn.prepare;"/>
+			</hbox>
+			<hbox align="center">
+				<label value="&sndb.method.title;"/>
+				<menulist id="method">
+					<menupopup>
+					<menuitem id="copy" label="&sndb.method.copy;" value="1"/>
+					<menuitem id="move" label="&sndb.method.move;" value="2"/>
+					</menupopup>
+				</menulist>
+			</hbox>
+			<hbox align="center">
+				<label value="&sndb.status.title;"/>
+				<menulist id="status">
+					<menupopup>
+					<menuitem id="unread" label="&sndb.status.unread;" value="1"/>
+					<menuitem id="read" label="&sndb.status.read;"   value="2"/>
+					<menuitem id="all"  label="&sndb.status.all;"  value="3"/>
+					</menupopup>
+				</menulist>
+			</hbox>
+			<hbox align="center">
+				<label value="&sndb.dstfolder.title;"/>
+				<menulist id="folder">
+					<menupopup>
+					<menuitem id="directly" label="&sndb.dstfolder.directly;" value="1"/>
+					<menuitem id="currtime" label="&sndb.dstfolder.currtime;" value="2" />
+					</menupopup>
+				</menulist>
+			</hbox>
+		</groupbox>
+		<groupbox>
+			<hbox align="center">
+				<label value="&sndb.info.addrcount;" />
+				<label id="distinfo" value="-/-" />
+				<spacer flex="1" />
+				<button type="button" id="bt_recount" name="bt_recount" oncommand="recountTargetMail()" label="&sndb.btn.recount;"/>
+			</hbox>
+			<hbox align="center">
+			<tree id="MailAddrListBox" flex="1" rows="12" editable="true">
+				<treecols>
+					<treecol id="chk" type="checkbox" editable="true" width="22" fixed="true" onclick="changeAllCheckboxStatus();" />
+					<treecol id="addr" label="&sndb.detail.addr;" width="300" fixed="false"/>
+					<splitter class="tree-splitter" />
+					<treecol id="count" label="&sndb.detail.count;" width="70" fixed="true" style="text-align: right"/>
+					<splitter class="tree-splitter" />
+					<treecol id="dstfolder" label="&sndb.detail.dstfolder;" flex="3" fixed="false"/>
+				</treecols>
+				<treechildren id="tc">
+				</treechildren>
+			</tree>
+			</hbox>
+			<hbox>
+				<button type="button" id="bt_execute" name="bt_execute" value="1" oncommand="executeDistribution()" label="&sndb.btn.execute;"/>
+				<spacer flex="1" />
+				<button type="button" id="bt_finish" name="bt_finish" value="2" oncommand="window.close()" label="&sndb.btn.finish;"/>
+			</hbox>
+		</groupbox>
+	</prefpane>
+
+	<script type="application/javascript" src="chrome://messenger/content/mailWindowOverlay.js"/>
+	<script type="application/javascript" src="chrome://messenger/content/mailCommands.js"/>
+	<script type="application/javascript" src="chrome://messenger/content/widgetglue.js"/>
+	<script type="application/javascript" src="chrome://sender-distribution/content/main.js" />
+
+</prefwindow>

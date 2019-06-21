@@ -1,0 +1,8 @@
+content sender-distribution       chrome/content/
+locale  sender-distribution ja    chrome/locale/ja/
+locale  sender-distribution en-US chrome/locale/en-US/
+
+skin sender-distribution classic/1.0 chrome/skin/
+
+overlay chrome://messenger/content/messenger.xul chrome://sender-distribution/content/menu.xul
+overlay chrome://messenger/content/messenger.xul chrome://sender-distribution/content/main.xul

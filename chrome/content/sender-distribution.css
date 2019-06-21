@@ -1,0 +1,5 @@
+treechildren::-moz-tree-checkbox(checked)
+{
+    width: 18px;
+    list-style-image: url('chrome://sender-distribution/skin/round_check_circle_black_18dp.png');    
+}

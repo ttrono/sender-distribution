@@ -1,0 +1,28 @@
+<!ENTITY sndb.menu.label "Sender Distribution">
+<!ENTITY sndb.window.title "Sender Distribution">
+<!ENTITY sndb.condition.targetmail "対象メールアドレス">
+<!ENTITY sndb.condition.pop3only "POP3のみ">
+
+<!ENTITY sndb.dstfolder.title "振分先フォルダ">
+<!ENTITY sndb.dstfolder.directly "受信トレイ直下">
+<!ENTITY sndb.dstfolder.currtime "受信トレイ/現在日時フォルダ">
+
+<!ENTITY sndb.status.title "メール状態">
+<!ENTITY sndb.status.unread "未読のみ">
+<!ENTITY sndb.status.read "既読のみ">
+<!ENTITY sndb.status.all "全て">
+
+<!ENTITY sndb.method.title "振分方法">
+<!ENTITY sndb.method.copy "コピー">
+<!ENTITY sndb.method.move "移動">
+
+<!ENTITY sndb.btn.prepare "検索">
+<!ENTITY sndb.btn.execute "振分実行">
+<!ENTITY sndb.btn.recount "再計算">
+<!ENTITY sndb.btn.finish "終了">
+
+<!ENTITY sndb.info.addrcount "メールアドレス数/メール総数">
+
+<!ENTITY sndb.detail.addr "メールアドレス">
+<!ENTITY sndb.detail.count "メール数">
+<!ENTITY sndb.detail.dstfolder "振分先フォルダ">

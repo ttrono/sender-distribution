@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+	<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+	<Description about="urn:mozilla:install-manifest">
+		<em:id>senderdist@gmail.com</em:id>
+		<em:type>2</em:type>
+		<em:name>Sender Distribution</em:name>
+		<em:version>0.1</em:version>
+		<em:description>distribute mails from inbox folder to temporary folders with the same name as a sender email</em:description>
+		<em:creator>Tetsuro Ono</em:creator>
+		<em:homepageURL>http://twitter.com/tetsuro_ono</em:homepageURL>
+
+		<em:file>
+			<Description>
+				<em:package>content/sender-distribution/</em:package>
+				<em:locale>locale/ja/sender-distribution/</em:locale>
+				<em:locale>locale/en-US/sender-distribution/</em:locale>
+			</Description>
+		</em:file>
+
+		<em:targetApplication>
+			<Description>
+				<em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+				<em:minVersion>60.7.0</em:minVersion>
+				<em:maxVersion>99.0.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+
+	</Description>
+</RDF>
