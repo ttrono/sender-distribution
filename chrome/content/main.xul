@@ -50,7 +50,6 @@
 				<label value="&sndb.dstfolder.title;"/>
 				<menulist id="folder">
 					<menupopup>
-					<menuitem id="directly" label="&sndb.dstfolder.directly;" value="1"/>
 					<menuitem id="currtime" label="&sndb.dstfolder.currtime;" value="2" />
 					</menupopup>
 				</menulist>
