@@ -1,10 +1,11 @@
 <!ENTITY sndb.menu.label "Sender Distribution">
 <!ENTITY sndb.window.title "Sender Distribution">
 <!ENTITY sndb.condition.targetmail "Target Mail Address">
+<!ENTITY sndb.condition.pop3only "POP3 only">
 
 <!ENTITY sndb.dstfolder.title "Distribution Folder">
 <!ENTITY sndb.dstfolder.directly "Inbox Directly">
-<!ENTITY sndb.dstfolder.currtime "Inbox/{SystemDate} Folder">
+<!ENTITY sndb.dstfolder.currtime "Inbox/SystemDate Folder">
 
 <!ENTITY sndb.status.title "Condition">
 <!ENTITY sndb.status.unread "Unread">
@@ -23,5 +24,5 @@
 <!ENTITY sndb.info.addrcount "Number of email addresses/Total number of emails">
 
 <!ENTITY sndb.detail.addr "Email Address">
-<!ENTITY sndb.detail.count "Number of emails">
+<!ENTITY sndb.detail.count "Number">
 <!ENTITY sndb.detail.dstfolder "Distribution Folder">

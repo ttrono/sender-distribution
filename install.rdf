@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 	<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 		xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
@@ -11,14 +11,22 @@
 		<em:creator>Tetsuro Ono</em:creator>
 		<em:homepageURL>http://twitter.com/tetsuro_ono</em:homepageURL>
 
-		<em:file>
+		<em:localized>
 			<Description>
-				<em:package>content/sender-distribution/</em:package>
-				<em:locale>locale/ja/sender-distribution/</em:locale>
-				<em:locale>locale/en-US/sender-distribution/</em:locale>
+				<em:locale>en-US</em:locale>
+				<em:name>Sender Distribution</em:name>
+				<em:description>distribute mails from inbox folder to temporary folders with the same name as a sender email</em:description>
+				<em:creator>Tetsuro Ono</em:creator>
 			</Description>
-		</em:file>
-
+		</em:localized>
+		<em:localized>
+			<Description>
+				<em:locale>ja</em:locale>
+				<em:name>Sender Distribution</em:name>
+				<em:description>受信フォルダのメールを送信者名と同名のテンポラリフォルダに振り分けます</em:description>
+				<em:creator>Tetsuro Ono</em:creator>
+			</Description>
+		</em:localized>
 		<em:targetApplication>
 			<Description>
 				<em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
