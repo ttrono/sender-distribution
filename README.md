@@ -42,7 +42,7 @@ C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\e
 
 * Windows:  ver 60.7.2
 * Mac: 未確認
-* Linux: 未確認
+* Linux: ver 60.7.1
 
 ## 注意事項
 
@@ -51,3 +51,7 @@ C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\e
 ```
 C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\sender-distribution.log
 ```
+
+* 下記の条件で振分が出来ない事が分かっています。下記条件の廃止を検討中です。
+
+** 振分先： 受信トレイ直下
