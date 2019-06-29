@@ -53,5 +53,4 @@ C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\s
 ```
 
 * 下記の条件で振分が出来ない事が分かっています。下記条件の廃止を検討中です。
-
-** 振分先： 受信トレイ直下
+    * 振分先： 受信トレイ直下
