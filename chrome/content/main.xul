@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?xml-stylesheet href="chrome://global/skin/"?>
 <?xml-stylesheet href="chrome://messenger/skin/preferences/preferences.css"?>
@@ -50,7 +50,6 @@
 				<label value="&sndb.dstfolder.title;"/>
 				<menulist id="folder">
 					<menupopup>
-					<menuitem id="directly" label="&sndb.dstfolder.directly;" value="1"/>
 					<menuitem id="currtime" label="&sndb.dstfolder.currtime;" value="2" />
 					</menupopup>
 				</menulist>
@@ -69,7 +68,7 @@
 					<treecol id="chk" type="checkbox" editable="true" width="22" fixed="true" onclick="changeAllCheckboxStatus();" />
 					<treecol id="addr" label="&sndb.detail.addr;" width="300" fixed="false"/>
 					<splitter class="tree-splitter" />
-					<treecol id="count" label="&sndb.detail.count;" width="70" fixed="true" style="text-align: right"/>
+					<treecol id="count" label="&sndb.detail.count;" width="70" fixed="true" style="text-align: right" tooltiptext="&sndb.detail.count;"/>
 					<splitter class="tree-splitter" />
 					<treecol id="dstfolder" label="&sndb.detail.dstfolder;" flex="3" fixed="false"/>
 				</treecols>
