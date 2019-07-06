@@ -177,11 +177,17 @@ function openScrCondition() {
   }
 }
 
-// ウィンドウ初期表示時、onloadより呼ばれる
+/*
+ * Initialize conditions.
+ *
+ * This function is called from onload when initialize window.
+ */
 function initScrCondition() {
   logger.writeDebug("start initScrCondition");
   try {
-    // 利用可能メアド一覧を作成
+    //
+    // create list of available mail addresses
+    //
     inboxList= getAddressList();
     if (inboxList == null) {
       logger.writeWarn(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
@@ -194,14 +200,12 @@ function initScrCondition() {
       }
     }
     if (menulist.itemCount > 0) {
-      menulist.selectedIndex = 0; // 先頭のメアドを選択状態にする
+      menulist.selectedIndex = 0; // select first mail address
     }
     
-    // 検索条件の初期化
     //
-    // Inboxフォルダ：デフォルト値
-    // 移動先フォルダ：Inbox直下
-    // 状態：未読
+    // Initialize search conditions
+    //
     document.getElementById("directly").setAttribute("selected", true);
     document.getElementById("unread").setAttribute("selected", true);
     document.getElementById("bt_recount").setAttribute("disabled", true);
