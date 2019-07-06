@@ -4,7 +4,6 @@
 <!ENTITY sndb.condition.pop3only "POP3のみ">
 
 <!ENTITY sndb.dstfolder.title "振分先フォルダ">
-<!ENTITY sndb.dstfolder.directly "受信トレイ直下">
 <!ENTITY sndb.dstfolder.currtime "受信トレイ/現在日時フォルダ">
 
 <!ENTITY sndb.status.title "メール状態">

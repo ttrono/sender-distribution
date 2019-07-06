@@ -4,7 +4,6 @@
 <!ENTITY sndb.condition.pop3only "POP3 only">
 
 <!ENTITY sndb.dstfolder.title "Distribution Folder">
-<!ENTITY sndb.dstfolder.directly "Inbox Directly">
 <!ENTITY sndb.dstfolder.currtime "Inbox/SystemDate Folder">
 
 <!ENTITY sndb.status.title "Condition">

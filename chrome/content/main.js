@@ -206,7 +206,6 @@ function initScrCondition() {
     //
     // Initialize search conditions
     //
-    document.getElementById("directly").setAttribute("selected", true);
     document.getElementById("unread").setAttribute("selected", true);
     document.getElementById("bt_recount").setAttribute("disabled", true);
     document.getElementById("bt_execute").setAttribute("disabled", true);
@@ -967,21 +966,20 @@ function doDistribution() {
       Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
               .getService(Components.interfaces.nsIMsgCopyService);
 
-    // 振り分け先フォルダ作成
+    //
+    // create distribution folder.
+    //
+    // sender-distribution.condition.p_folder = 1 is invalid
+    // because API GetMsgFolderFromUri() has disabled
+    // and achived the process of moving mail to temporary folder.
+    //
     var dstBaseFolder;
-    var p_folder = prefb.getIntPref("sender-distribution.condition.p_folder");
-    logger.writeInfo("p_folder =" + p_folder);
-    
-    if (p_folder == 1) {
-      dstBaseFolder = GetMsgFolderFromUri(srcFolder.URI, true);
-    } else {
-      var subfolder_name = prefb.getCharPref("sender-distribution.condition.p_folder_name");
-      if (srcFolder.containsChildNamed(subfolder_name) == false) {
-        srcFolder.createSubfolder(subfolder_name, null);
-        logger.writeInfo("created sub folder=" + subfolder_name);
-      }
-      dstBaseFolder = srcFolder.findSubFolder(subfolder_name);
+    var subfolder_name = prefb.getCharPref("sender-distribution.condition.p_folder_name");
+    if (srcFolder.containsChildNamed(subfolder_name) == false) {
+      srcFolder.createSubfolder(subfolder_name, null);
+      logger.writeInfo("created sub folder=" + subfolder_name);
     }
+    dstBaseFolder = srcFolder.findSubFolder(subfolder_name);
     
     var database = srcFolder.msgDatabase;
 
