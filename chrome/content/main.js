@@ -406,7 +406,6 @@ function changeConditionBtn(isDisabled) {
     document.getElementById("method").setAttribute("disabled", isDisabled);
   } catch(e) {
     logger.writeError("changeConditionBtn(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end changeConditionBtn");
@@ -444,7 +443,6 @@ function prepareDistribution() {
     }
   } catch(e) {
     logger.writeError("prepareDistribution(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end prepareDistribution");
@@ -572,7 +570,6 @@ function createDistibutionManageInfo() {
     }
   } catch(e) {
     logger.writeError("createDistibutionManageInfo(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally {
     database = null;
@@ -594,7 +591,6 @@ function deleteDistibutionListFile() {
     }
   } catch(e) {
     logger.writeError("deleteDistibutionListFile(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end deleteDistibutionListFile");
@@ -633,7 +629,6 @@ function outputDistibutionListFile(header) {
       retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + RTNCD);
   } catch(e) {
     logger.writeError("outputDistibutionListFile(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally{
     if (converterStream != null) {
@@ -686,7 +681,6 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
     }
   } catch(e) {
     logger.writeError("outputDistibutionManagerFile(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally{
     if (converterStream != null) {
@@ -742,7 +736,6 @@ function createDistibutionListInfo(manageAry) {
     }
   } catch(e) {
     logger.writeError("createDistibutionListInfo(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally {
     database = null;
@@ -814,7 +807,6 @@ function readDistibutionManagerFile() {
     } while(cont);
   } catch(e) {
     logger.writeError("readDistibutionManagerFile(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally {
     if (lis != null) {
@@ -860,7 +852,6 @@ function getDistibutionInfo() {
     }
   } catch(e) {
     logger.writeError("getDistibutionInfo(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally {
     logger.writeDebug("end getDistibutionInfo");
@@ -918,7 +909,6 @@ function getTargetMailAddress() {
     }
   } catch(e) {
     logger.writeError("getTargetMailAddress(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
 
@@ -1060,7 +1050,6 @@ function doDistribution() {
     alert(stbundle.getLocalizedMessage("sndb.finish"));
   } catch(e) {
     logger.writeError("doDistribution(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   } finally {
     if (lis != null) {
@@ -1116,7 +1105,6 @@ function clearListItems() {
     document.getElementById("distinfo").setAttribute("value", "-/-");
   } catch(e) {
     logger.writeError("clearListItems(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end clearListItems");
@@ -1201,7 +1189,6 @@ function appendDistributionListItem(idx, folder) {
       "addr=" + folder['folder'] + ",count=" + folder['count'] + ",dstfolder=" + folder_name);
   } catch(e) {
     logger.writeError("appendDistributionListItem(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end appendDistributionListItem");
@@ -1226,7 +1213,6 @@ function changeAllCheckboxStatus() {
     chkBoxStatus = !chkBoxStatus;
   } catch(e) {
     logger.writeError("changeAllCheckboxStatus(): " + e);
-    // エラー処理は呼び出し元に委ねる
     throw e;
   }
   logger.writeDebug("end changeAllCheckboxStatus");
