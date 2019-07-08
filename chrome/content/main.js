@@ -75,7 +75,7 @@ var logger = {
     if (isDebug) this.writeLog(LOG_DEBUG, data);
   },
   writeInfo :  function(data) {
-    this.writeLog(LOG_INFO, data);
+    if (isDebug) this.writeLog(LOG_INFO, data);
   },
   writeWarn :  function(data) {
     this.writeLog(LOG_WARN, data);
