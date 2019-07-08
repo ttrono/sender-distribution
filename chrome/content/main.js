@@ -193,9 +193,7 @@ function openScrCondition() {
 function initScrCondition() {
   logger.writeDebug("start initScrCondition");
   try {
-    //
     // create list of available mail addresses
-    //
     inboxList= getAddressList();
     if (inboxList == null) {
       logger.writeWarn(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
@@ -210,10 +208,8 @@ function initScrCondition() {
     if (menulist.itemCount > 0) {
       menulist.selectedIndex = 0; // select first mail address
     }
-    
-    //
+
     // Initialize search conditions
-    //
     document.getElementById("unread").setAttribute("selected", true);
     document.getElementById("bt_recount").setAttribute("disabled", true);
     document.getElementById("bt_execute").setAttribute("disabled", true);
@@ -283,7 +279,7 @@ function getAddressList() {
  */
 function getInboxFolderByIndex(index) {
   logger.writeDebug("start getInboxFolderByIndex");
-  
+
   var inboxFolder;
   try {
     var servers = accountManager.allServers;
@@ -404,7 +400,7 @@ function changeConditionBtn(isDisabled) {
     }
     document.getElementById("bt_prepare").setAttribute("label", bt_prepare_label);
     document.getElementById("inbox").setAttribute("disabled", isDisabled);
-    
+
     document.getElementById("folder").setAttribute("disabled", isDisabled);
     document.getElementById("status").setAttribute("disabled", isDisabled);
     document.getElementById("method").setAttribute("disabled", isDisabled);
@@ -423,11 +419,11 @@ function changeConditionBtn(isDisabled) {
 function prepareDistribution() {
   logger.writeDebug("start prepareDistribution");
 
-  try {  
+  try {
     if (prefb.getIntPref("sender-distribution.condition.p_edit_status") == 1) {
       changeConditionBtn(true);
     }
-    
+
     createDistibutionManageInfo();
 
     var btnExec = document.getElementById("bt_execute");
@@ -512,7 +508,7 @@ function retrieveMadr(headerFrom) {
  */
 function createDistibutionManageInfo() {
   logger.writeDebug("start createDistibutionManageInfo");
-  
+
   var count = 0;
   var percentage = 0;
   var inboxFolder;
@@ -522,7 +518,7 @@ function createDistibutionManageInfo() {
     var mailcount = getMailCount();
     var manageAry = new Array();
     var p_inbox = prefb.getIntPref("sender-distribution.condition.p_inbox");
-    var p_status =prefb.getIntPref("sender-distribution.condition.p_status"); 
+    var p_status =prefb.getIntPref("sender-distribution.condition.p_status");
     inboxFolder = getInboxFolderByIndex(p_inbox);
     database = inboxFolder.msgDatabase;
     var enumerator = database.EnumerateMessages();
@@ -655,7 +651,7 @@ function outputDistibutionListFile(header) {
  */
 function outputDistibutionManagerFile(manageAry, mailcount) {
   logger.writeDebug("start outputDistibutionManagerFile");
-  
+
   var converterStream;
   var fileStream;
   try {
@@ -668,26 +664,26 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
       logger.writeInfo("delete " + propd.path + getFileSeparator() + FILENAME_MANAGER);
     }
     file.create(file.NORMAL_FILE_TYPE, 0666);
-  
+
     fileStream = Components
         .classes['@mozilla.org/network/file-output-stream;1']
         .createInstance(Components.interfaces.nsIFileOutputStream);
 
     // because avoiding file read only, include 0x10 to value.
     fileStream.init(file, 0x02 | 0x08 | 0x10, 0x664, false);
-  
+
     converterStream = Components
         .classes['@mozilla.org/intl/converter-output-stream;1']
         .createInstance(Components.interfaces.nsIConverterOutputStream);
     converterStream.init(fileStream, CHARSET, 0,
         Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
     converterStream.writeString("totalcount=" + mailcount + RTNCD);
+
     for (var index=0;index<manageAry.length;index++) {
       // a count of mail per mail address
       converterStream.writeString("folder=" + manageAry[index]['author'] + RTNCD);
       converterStream.writeString("count=" + manageAry[index]['count'] + RTNCD);
     }
-    
   } catch(e) {
     logger.writeError("outputDistibutionManagerFile(): " + e);
     // エラー処理は呼び出し元に委ねる
@@ -708,7 +704,7 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
  */
 function createDistibutionListInfo(manageAry) {
   logger.writeDebug("start createDistibutionListInfo");
-  
+
   var inboxFolder;
   var database;
 
@@ -768,19 +764,19 @@ function readDistibutionManagerFile() {
       .classes['@mozilla.org/file/local;1']
       .createInstance(Components.interfaces.nsIFile);
     file.initWithPath(propd.path + getFileSeparator() + FILENAME_MANAGER);
-  
+
     fileStream = Components
         .classes['@mozilla.org/network/file-input-stream;1']
         .createInstance(Components.interfaces.nsIFileInputStream);
     fileStream.init(file, 1, 0, false);
-  
+
     var CC = Components.Constructor;
     var ConverterInputStream = CC("@mozilla.org/intl/converter-input-stream;1",
                   "nsIConverterInputStream",
                   "init");
     lis = new ConverterInputStream(fileStream, CHARSET, 1024, 0x0);
     lis.QueryInterface(Components.interfaces.nsIUnicharLineInputStream);
-  
+
     var folders = new Array();
     var folder = null;
     var totalcount;
@@ -843,7 +839,7 @@ function readDistibutionManagerFile() {
     if (a['folder'] < b['folder']) return 1;
     return 0;
   });
-  
+
   logger.writeDebug("end readDistibutionManagerFile");
   return folders;
 }
@@ -853,7 +849,7 @@ function readDistibutionManagerFile() {
  */
 function getDistibutionInfo() {
   logger.writeDebug("start getDistibutionInfo");
-  
+
   var managerAry = null;
   try {
     // reconfirm a count of selected mail address
@@ -861,8 +857,7 @@ function getDistibutionInfo() {
     if (managerAry.length == 0) {
       logger.writeWarn("there are no mail by selected conditions.");
       alert(stbundle.getLocalizedMessage("sndb.info.nomail"));
-    } 
-
+    }
   } catch(e) {
     logger.writeError("getDistibutionInfo(): " + e);
     // エラー処理は呼び出し元に委ねる
@@ -878,7 +873,7 @@ function getDistibutionInfo() {
  */
 function showDistibutionInfoList(managerAry) {
   logger.writeDebug("start showDistibutionInfo");
-  
+
   try {
     var mailcount = getMailCount();
     var distinfo = document.getElementById("distinfo");
@@ -903,7 +898,7 @@ function getTargetMailAddress() {
   logger.writeDebug("start getTargetMailAddress");
 
   var mailAddrAry;
-  
+
   try {
     mailAddrAry = new Array();
     var listbox = document.getElementById("MailAddrListBox");
@@ -926,7 +921,7 @@ function getTargetMailAddress() {
     // エラー処理は呼び出し元に委ねる
     throw e;
   }
-  
+
   logger.writeDebug("end getTargetMailAddress");
   return mailAddrAry;
 }
@@ -938,10 +933,10 @@ function recountTargetMail() {
     var listbox = document.getElementById("MailAddrListBox");
     var totalCnt = 0;
     var totalMailAdrCnt = 0;
-  
+
     var rows = listbox.getElementsByTagNameNS(
       "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treerow");
-    
+
     for (var idx = 0;idx < rows.length;idx++) {
       // get a checkbox value of first record
       var chkValue = toBoolean(rows[idx].children[0].getAttribute('value'));
@@ -987,19 +982,19 @@ function doDistribution() {
       .classes['@mozilla.org/file/local;1']
       .createInstance(Components.interfaces.nsIFile);
     file.initWithPath(propd.path + getFileSeparator() + FILENAME_LIST);
-  
+
     fileStream = Components
       .classes['@mozilla.org/network/file-input-stream;1']
       .createInstance(Components.interfaces.nsIFileInputStream);
     fileStream.init(file, 1, 0, false);
-  
+
     var CC = Components.Constructor;
     var ConverterInputStream = CC("@mozilla.org/intl/converter-input-stream;1",
                   "nsIConverterInputStream",
                   "init");
     lis = new ConverterInputStream(fileStream, CHARSET, 1024, 0x0);
     lis.QueryInterface(Components.interfaces.nsIUnicharLineInputStream);
-  
+
     var count = 0;
     var out = {value: ""};
     var srcFolder =
@@ -1025,7 +1020,7 @@ function doDistribution() {
       logger.writeInfo("created sub folder=" + subfolder_name);
     }
     dstBaseFolder = srcFolder.findSubFolder(subfolder_name);
-    
+
     var database = srcFolder.msgDatabase;
 
     do {
@@ -1037,11 +1032,10 @@ function doDistribution() {
       // mail address,mail header id
       // (unique mail header id is assigned automatically for same mail address)
       //
-
       out.value = "";
       var cont = lis.readLine(out);
       var record = out.value.split(',');
-      
+
       if (dstBaseFolder.containsChildNamed(record[0]) == false) {
         dstBaseFolder.createSubfolder(record[0], null);
         logger.writeInfo("created sub folder=" + record[0]);
@@ -1053,7 +1047,7 @@ function doDistribution() {
       var array = Components.classes["@mozilla.org/array;1"]
               .createInstance(Components.interfaces.nsIMutableArray);
       array.appendElement(msg, false);
-      
+
       copyService.CopyMessages(srcFolder, array, dstFolder, isMove, null, null, false);
       count++;
 
@@ -1163,7 +1157,7 @@ function appendDistributionListItem(idx, folder) {
     cellCount.setAttribute('tooltiptext', folder['count']);
     cellCount.setAttribute('crop', "none");
     cellCount.setAttribute('editable', false);
-    
+
     var folder_name = "";
     var p_folder = prefb.getIntPref("sender-distribution.condition.p_folder");
     if (p_folder == 1) {
@@ -1185,7 +1179,7 @@ function appendDistributionListItem(idx, folder) {
 
     logger.writeDebug(
       "addr=" + folder['folder'] + ",count=" + folder['count'] + ",dstfolder=" + folder_name);
-    
+
     var valueRow =
       document.createElementNS(
         "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treerow");
@@ -1194,8 +1188,8 @@ function appendDistributionListItem(idx, folder) {
     valueRow.appendChild(cellAddr);
     valueRow.appendChild(cellCount);
     valueRow.appendChild(cellFolder);
-    
-    var valueItem = 
+
+    var valueItem =
       document.createElementNS(
         "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treeitem");
     valueItem.appendChild(valueRow);
@@ -1251,7 +1245,7 @@ function resetProp() {
     prefb.setIntPref("sender-distribution.condition.p_status", -1);
     prefb.setIntPref("sender-distribution.condition.p_method", -1);
     prefb.setIntPref("sender-distribution.condition.p_edit_status", -1);
-    prefb.setIntPref("sender-distribution.condition.mailcount", -1);    
+    prefb.setIntPref("sender-distribution.condition.mailcount", -1);
   } catch(e) {
     logger.writeError("resetProp(): " + e);
   }
