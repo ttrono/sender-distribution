@@ -41,16 +41,13 @@ C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\e
 ## 動作確認済みバージョン
 
 * Windows:  ver 60.7.2
-* Mac: 未確認
+* Mac: ver 60.7.2
 * Linux: ver 60.7.1
 
 ## 注意事項
 
-* 当アドオンは開発中であり、デバッグ用ログ出力を有効にしています。そのため、下記フォルダにログファイルが出力されます。ログファイルは自動削除されないため、定期的に手作業で削除する必要があります。
+* エラーが発生した場合、下記のファイルにエラーログが出力されます。ログファイルは自動削除されないため、エラー解消後に手作業で削除してください。
 
 ```
 C:\Users\developer\AppData\Roaming\Thunderbird\Profiles\{プロファイルID}\sender-distribution.log
 ```
-
-* 下記の条件で振分が出来ない事が分かっています。下記条件の廃止を検討中です。
-    * 振分先： 受信トレイ直下
