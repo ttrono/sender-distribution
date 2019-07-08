@@ -1,9 +1,13 @@
-// 広域変数
+//================================
+// global variables
+//================================
 var inboxList = null;
 var mailcount = 0;
 var chkBoxStatus = false;
 
-// 定数
+//================================
+// constant
+//================================
 var CHARSET = 'UTF-8';
 var RTNCD = "\r\n";
 var FILENAME_LOG = 'sender-distribution.log';
@@ -15,7 +19,7 @@ var LOG_INFO = "INFO";
 var LOG_WARN = "WARN";
 var LOG_ERROR = "ERROR";
 
-// デバッグ状態は設定エディタより変更可能
+// change enable or disable by settings editor
 var isDebug = false;
 
 var prefb = Components.classes["@mozilla.org/preferences-service;1"]
@@ -54,7 +58,7 @@ var logger = {
       foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
         .createInstance(Components.interfaces.nsIFileOutputStream);
       // PR_WRONLY | PR_CREATE_FILE | PR_APPEND
-      foStream.init(file, 0x02 | 0x08 | 0x10, 0664, 0); 
+      foStream.init(file, 0x02 | 0x08 | 0x10, 0664, 0);
 
       RTNCD = getCRLF();
       data = getTime(1) + " <" + level + "> " + data + RTNCD;
@@ -86,9 +90,9 @@ var accountManager
             .getService(Components.interfaces.nsIMsgAccountManager);
 
 
-////////////////
-//  共通関数  //
-////////////////
+//================================
+// common function
+//================================
 function toBoolean (data) {
   return data.toLowerCase() === 'true';
 }
@@ -143,24 +147,28 @@ function getFileSeparator(){
 }
 
 
-///////////////////////
-// メール振分処理    //
-///////////////////////
+//================================
+// business logic
+//================================
 
-// メール振分条件画面を開く。メニューバーから最初に実行する。
+/*
+ * Open distribution condition window.
+ *
+ * This window is called by menu bar.
+ */
 function openScrCondition() {
   var isRunning = null;
   try {
-    // double open check
+    // double runnning check
     isRunning = prefb.getIntPref("sender-distribution.running");
   } catch(e) {
-    // 初回起動時はどうしても例外が発生する
+    // nop. exception always occur at first execution.
   }
 
   try {
     isDebug = prefb.getIntPref("sender-distribution.debug");
   } catch(e) {
-    // 未定義の場合、初期値を設定
+    // If undefined, set initial value
     isDebug = false;
     prefb.setIntPref("sender-distribution.debug", isDebug);
   }
@@ -170,7 +178,7 @@ function openScrCondition() {
     var winopts = "chrome,menubar=yes,status=yes,toolbar=yes";
     window.open("chrome://sender-distribution/content/main.xul", "_blank", winopts);
   } else {
-    // 二重起動防止
+    // stop double running
     alert(stbundle.getLocalizedMessage("sndb.running"));
     logger.writeWarn("Sender Distribution is runnning.");
     logger.writeWarn("please change the prefference value 'sender-distribution.running' to -1");
@@ -217,17 +225,25 @@ function initScrCondition() {
   logger.writeDebug("end initScrCondition");
 }
 
-// POP3用メールアドレス一覧取得
+/*
+ * Get mail address list (POP3 only)
+ *
+ * IMAP4 not support because there are some folder constraint.
+ * ex: folder name length can't match email address length.
+ *
+ */
 function getAddressList() {
   logger.writeDebug("start getAddressList");
 
   var inboxFolders = new Array();
   try {
-    // 全サーバ情報から登録済みメールアドレスを取得し、
-    // 処理対象となる受信フォルダの一覧を作成
+    //
+    // Get registered mail address from all servers,
+    // then create inbox list to be processed.
+    //
     var servers = accountManager.allServers;
     if (servers == null || servers.length == 0) {
-      // 受信フォルダが存在しない場合、強制終了
+      // force finish if not exists inbox.
       alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
       forceFinish();
     }
@@ -238,25 +254,23 @@ function getAddressList() {
       var inboxFolder = GetInboxFolder(server);
       logger.writeDebug("mail type=" + server.type);
 
-      // pop3のみ対象とする
-      // IMAPはフォルダ長に上限があったり、他にもフォルダ作成に制約があるので対象外とした
       if (inboxFolder != null && server.type == "pop3") {
         inboxFolders.push(server.prettyName);
         logger.writeInfo("index=" + index + ", target mail address=" + server.prettyName);
       } else {
-        inboxFolders.push("null");  // 通常のnullだと判定が適切にできなかったので
-                                    // ダミー値を設定し、プルダウン値を空にする
+        // normal null can't judge properly, so set dummy value and make pulldown empty.
+        inboxFolders.push("null");
         logger.writeInfo("index=" + index+", inboxFolder is null");
       }
     }
   } catch(e) {
-    // 例外時は強制終了せず、呼び出し元に戻る
+    // If occur exception, do not terminate forcibly and return tothe caller,
     logger.writeError("getAddressList(): "+e);
     throw e;
   }
-  
+
+  // force finish if not exists inbox.
   if (inboxFolders.length == 0) {
-    // 処理対象となる受信フォルダが存在しない場合、強制終了
     alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
     forceFinish();
   }
@@ -264,15 +278,18 @@ function getAddressList() {
   return inboxFolders;
 }
 
-// 指定したメールアドレスの受信フォルダ取得
+/*
+ * Get inbox at specified mail address.
+ */
 function getInboxFolderByIndex(index) {
   logger.writeDebug("start getInboxFolderByIndex");
   
   var inboxFolder;
   try {
     var servers = accountManager.allServers;
+
+    // force finish if no server infomations.
     if (servers == null || servers.length == 0) {
-      // サーバ情報が存在しない場合、強制終了
       alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
       forceFinish();
     }
@@ -293,8 +310,11 @@ function getInboxFolderByIndex(index) {
   return inboxFolder;
 }
 
-// 振分条件チェック
-// 振分条件画面で振分準備ボタン押下時に実行
+/*
+ * check distribution conditions.
+ *
+ * execute if search button clicked.
+ */
 function checkCondition() {
   logger.writeDebug("start checkCondition");
   try {
@@ -308,7 +328,7 @@ function checkCondition() {
       // nop
     }
 
-    // Inboxフォルダ・入力必須チェック
+    // require check: inbox
     var item = document.getElementById("inbox").selectedItem;
     var p_inbox = item != null ? item.value : -1;
     logger.writeDebug("p_inbox = " + p_inbox);
@@ -316,7 +336,8 @@ function checkCondition() {
       alert(stbundle.getLocalizedMessage("sndb.condition.inbox.error"));
       return;
     }
-    //  サブフォルダ選択時のみサブフォルダ名チェック
+
+    // value check: folder
     item = document.getElementById("folder").selectedItem;
     var p_folder = item != null ? item.value : -1;
     logger.writeDebug("p_folder = " + p_folder);
@@ -325,7 +346,8 @@ function checkCondition() {
       alert(stbundle.getLocalizedMessage("sndb.condition.folder.error"));
       return;
     }
-    // 状態・入力必須チェック
+
+    // require check: mail status
     item = document.getElementById("status").selectedItem;
     var p_status = item != null ? item.value : -1;
     logger.writeDebug("p_status = " + p_status);
@@ -334,7 +356,8 @@ function checkCondition() {
       alert(stbundle.getLocalizedMessage("sndb.condition.status.error"));
       return;
     }
-    // 移動方法・入力必須チェック
+
+    // require check: mail transfer method
     item = document.getElementById("method").selectedItem;
     var p_method = item != null ? item.value : -1;
     logger.writeDebug("p_method = " + p_method);
@@ -343,8 +366,8 @@ function checkCondition() {
       alert(stbundle.getLocalizedMessage("sndb.condition.method.error"));
       return;
     }
-    
-    // チェックが正常終了した場合、各値をプロパティとして保存
+
+    // If condition check is ok, save conditions as property value.
     prefb.setIntPref("sender-distribution.condition.p_inbox", p_inbox);
     prefb.setIntPref("sender-distribution.condition.p_folder", p_folder);
     prefb.setIntPref("sender-distribution.condition.p_status", p_status);
@@ -360,7 +383,9 @@ function checkCondition() {
   logger.writeDebug("end checkCondition");
 }
 
-// 振分条件ボタンの状態を切り替える
+/*
+ * change each button state.
+ */
 function changeConditionBtn(isDisabled) {
   logger.writeDebug("start changeConditionBtn");
 
@@ -369,7 +394,7 @@ function changeConditionBtn(isDisabled) {
     if (isDisabled) {
       bt_prepare_label = stbundle.getLocalizedMessage("sndb.bt_prepare.cancel");
     } else {
-      // 条件再入力を押下した場合
+      // in case of pressing cancel button
       bt_prepare_label = stbundle.getLocalizedMessage("sndb.bt_prepare.init");
       prefb.setIntPref("sender-distribution.condition.p_edit_status", 0);
       document.getElementById("bt_recount").setAttribute("disabled", true);
@@ -392,8 +417,9 @@ function changeConditionBtn(isDisabled) {
 }
 
 
-
-// 振分実行準備
+/*
+ * prepare mail distribution.
+ */
 function prepareDistribution() {
   logger.writeDebug("start prepareDistribution");
 
@@ -409,12 +435,13 @@ function prepareDistribution() {
     var distInfo = getDistibutionInfo();
     if (distInfo.length > 0) {
       showDistibutionInfoList(distInfo);
-      
-      // 振分実行ボタンを有効にする
+
+      // enable distribution button
       btnExec.setAttribute("disabled", false);
       btnRecnt.setAttribute("disabled", false);
     } else {
-      // 振分対象メールが無い場合、条件再入力
+
+      // reinput conditions if target mail is nothing.
       btnExec.setAttribute("disabled", true);
       btnRecnt.setAttribute("disabled", true);
       changeConditionBtn(false);
@@ -428,15 +455,16 @@ function prepareDistribution() {
 }
 
 
-
-// 振分対象メール件数取得
+/*
+ * get a count of target mail number.
+ */
 function getMailCount() {
   logger.writeDebug("start getMailCount");
 
   var mailcount = 0;
   try {
     var p_inbox   = prefb.getIntPref("sender-distribution.condition.p_inbox");
-    var p_status  = prefb.getIntPref("sender-distribution.condition.p_status"); 
+    var p_status  = prefb.getIntPref("sender-distribution.condition.p_status");
     var inboxFolder = getInboxFolderByIndex(p_inbox);
 
     if (p_status == 1) {
@@ -454,11 +482,13 @@ function getMailCount() {
   return mailcount;
 }
 
-// メールヘッダ・差出名からメールアドレスを抽出
+/*
+ * retrieve mail address from sender of mail header.
+ */
 function retrieveMadr(headerFrom) {
   logger.writeDebug("start retrieveMadr");
-  
-  // 差出名が<>で囲われていないこともある
+
+  // it is possible that sender isn't enclosed by <>
   email = headerFrom;
 
   try {
@@ -475,9 +505,11 @@ function retrieveMadr(headerFrom) {
   return email;
 }
 
-
-// 振分情報生成
-// 指定フォルダのメール情報をファイル出力する
+/*
+ * create a distribution manager information.
+ *
+ * output mail informations of specified folder to file.
+ */
 function createDistibutionManageInfo() {
   logger.writeDebug("start createDistibutionManageInfo");
   
@@ -495,10 +527,10 @@ function createDistibutionManageInfo() {
     database = inboxFolder.msgDatabase;
     var enumerator = database.EnumerateMessages();
 
-    // 前回処理で作った一覧ファイルを削除
+    // delete existing list file.
     deleteDistibutionListFile();
-    
-    // 差出人メールアドレスを抽出
+
+    // retrieve sender address from mail header.
     while (enumerator.hasMoreElements()) {
       var header = enumerator.getNext();
       if (header instanceof Components.interfaces.nsIMsgDBHdr) {
@@ -514,7 +546,7 @@ function createDistibutionManageInfo() {
            }
         }
         if (isMatch == false) {
-          // 見つけたメアドが管理ファイル未出力の場合
+          // if mail address in process is not included manager file
           var item = {author: author, count: 1};
           manageAry.push(item);
         } else {
@@ -522,7 +554,7 @@ function createDistibutionManageInfo() {
         }
         count++;
 
-        // 進捗率再計算
+        // calculate progress rate in case of debug mode
         if (isDebug) {
           percentage = Math.round((count / mailcount) * 100);
           logger.writeDebug(
@@ -534,12 +566,12 @@ function createDistibutionManageInfo() {
     // 振分対象メール数保存
     prefb.setIntPref("sender-distribution.condition.mailcount", mailcount);
 
-    // とりまとめたメール情報を管理ファイルに出力
+    // output mail information to a manager file.
     outputDistibutionManagerFile(manageAry, mailcount);
 
     var p_folder = prefb.getIntPref("sender-distribution.condition.p_folder");
     if (p_folder == 2) {
-      // 振分先フォルダ名決定
+      // decide distribution folder name using date & time
       prefb.setCharPref("sender-distribution.condition.p_folder_name", getTime(2));
     }
   } catch(e) {
@@ -553,7 +585,6 @@ function createDistibutionManageInfo() {
   logger.writeDebug("end createDistibutionManageInfo");
 }
 
-// 振分一覧ファイルを削除
 function deleteDistibutionListFile() {
   logger.writeDebug("start deleteDistibutionListFile");
   try {
@@ -574,7 +605,9 @@ function deleteDistibutionListFile() {
 }
 
 
-// 振分一覧ファイルを出力
+/*
+ * output a distribution list file using mail header information.
+ */
 function outputDistibutionListFile(header) {
   logger.writeDebug("start outputDistibutionListFile");
 
@@ -600,7 +633,6 @@ function outputDistibutionListFile(header) {
     converterStream.init(fileStream, CHARSET, 0,
         Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
-    // ファイル出力
     converterStream.writeString(
       retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + RTNCD);
   } catch(e) {
@@ -618,7 +650,9 @@ function outputDistibutionListFile(header) {
   logger.writeDebug("end outputDistibutionListFile");
 }
 
-// メアド毎のメール件数を管理するファイルを出力
+/*
+ * output a manager file(consists of a count of mail per mail address)
+ */
 function outputDistibutionManagerFile(manageAry, mailcount) {
   logger.writeDebug("start outputDistibutionManagerFile");
   
@@ -638,7 +672,8 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
     fileStream = Components
         .classes['@mozilla.org/network/file-output-stream;1']
         .createInstance(Components.interfaces.nsIFileOutputStream);
-    // 0x10を含めないと、ファイルがreadonlyになってしまう
+
+    // because avoiding file read only, include 0x10 to value.
     fileStream.init(file, 0x02 | 0x08 | 0x10, 0x664, false);
   
     converterStream = Components
@@ -646,11 +681,9 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
         .createInstance(Components.interfaces.nsIConverterOutputStream);
     converterStream.init(fileStream, CHARSET, 0,
         Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
-
-    // ファイル出力
     converterStream.writeString("totalcount=" + mailcount + RTNCD);
     for (var index=0;index<manageAry.length;index++) {
-      // 差出人判定のみ実装
+      // a count of mail per mail address
       converterStream.writeString("folder=" + manageAry[index]['author'] + RTNCD);
       converterStream.writeString("count=" + manageAry[index]['count'] + RTNCD);
     }
@@ -670,7 +703,9 @@ function outputDistibutionManagerFile(manageAry, mailcount) {
   logger.writeDebug("end outputDistibutionManagerFile");
 }
 
-// メアドとメアドIDの一覧ファイルを作成
+/*
+ * create list file consist of mail address and mail header id.
+ */
 function createDistibutionListInfo(manageAry) {
   logger.writeDebug("start createDistibutionListInfo");
   
@@ -679,13 +714,16 @@ function createDistibutionListInfo(manageAry) {
 
   try {
     var p_inbox = prefb.getIntPref("sender-distribution.condition.p_inbox");
-    var p_status =prefb.getIntPref("sender-distribution.condition.p_status"); 
+    var p_status =prefb.getIntPref("sender-distribution.condition.p_status");
     inboxFolder = getInboxFolderByIndex(p_inbox);
     database = inboxFolder.msgDatabase;
     var enumerator = database.EnumerateMessages();
-    
-    // 入力条件に一致したメールの差出人と関数の引数で渡した差出人が
-    // 一致したメールを振分対象メールとする
+
+    // If follow A and B matched, then sender is target.
+    //
+    //   A: mail sender matching the distribution condition.
+    //   B: mail sender passed as parameter of this function
+    //
     while (enumerator.hasMoreElements()) {
       var header = enumerator.getNext();
       if (header instanceof Components.interfaces.nsIMsgDBHdr) {
@@ -717,7 +755,9 @@ function createDistibutionListInfo(manageAry) {
   logger.writeDebug("end createDistibutionListInfo");
 }
 
-// 画面上に表示するメアド情報を管理ファイルから読み込む
+/*
+ * read mail addresses for treechildren from manager file.
+ */
 function readDistibutionManagerFile() {
   logger.writeDebug("start readDistibutionManagerFile");
 
@@ -744,7 +784,7 @@ function readDistibutionManagerFile() {
     var folders = new Array();
     var folder = null;
     var totalcount;
-    var isRead = false;  // 1件以上読めばtrueに更新
+    var isRead = false;  // update to true in case of reading 1 or more records.
     var out = {value: ""};
     do {
       out.value = "";
@@ -756,8 +796,8 @@ function readDistibutionManagerFile() {
           folder = null;
         }
         isRead = true;
-      
-        // folder行読み込み時にfoler配列を初期化する
+
+        // initialize folder array when reading folder row.
         folder = new Array();
         folder['folder'] = value.replace(/^folder=/g, '');
         folder['count'] = 0;
@@ -789,8 +829,9 @@ function readDistibutionManagerFile() {
     }
   }
 
+  // sort order
+  //  a count of mail (ascending) -> mail address (decending)
   folders.sort(function(a, b){
-    // メール件数降順 -> メールアドレス昇順でソート
     var cntA = Number(a['count']);
     var cntB = Number(b['count']);
     if (cntA > cntB) return -1;
@@ -807,13 +848,15 @@ function readDistibutionManagerFile() {
   return folders;
 }
 
-// 振分情報表示
+/*
+ * Get distribution infomation from manager file.
+ */
 function getDistibutionInfo() {
   logger.writeDebug("start getDistibutionInfo");
   
   var managerAry = null;
   try {
-    // 振り分けメールの有無判定
+    // reconfirm a count of selected mail address
     managerAry = readDistibutionManagerFile();
     if (managerAry.length == 0) {
       logger.writeWarn("there are no mail by selected conditions.");
@@ -830,7 +873,9 @@ function getDistibutionInfo() {
   return managerAry;
 }
 
-// 振分情報表示
+/*
+ * show distribution infomation(main number and mail list).
+ */
 function showDistibutionInfoList(managerAry) {
   logger.writeDebug("start showDistibutionInfo");
   
@@ -839,8 +884,8 @@ function showDistibutionInfoList(managerAry) {
     var distinfo = document.getElementById("distinfo");
     distinfo.setAttribute("value", managerAry.length + "/" + mailcount);
 
+    // append distributions to treeitem
     for(var index = 0;index < managerAry.length;index++) {
-      // 振分情報をtreeに1行ずつ追加
       var folder = managerAry[index];
       appendDistributionListItem(index, folder);
     }
@@ -851,7 +896,9 @@ function showDistibutionInfoList(managerAry) {
   return;
 }
 
-// リストでチェックされたメアドを取得
+/*
+ * retrieve checked mail address.
+ */
 function getTargetMailAddress() {
   logger.writeDebug("start getTargetMailAddress");
 
@@ -884,7 +931,6 @@ function getTargetMailAddress() {
   return mailAddrAry;
 }
 
-// 対象メール件数を再計算
 function recountTargetMail() {
   logger.writeDebug("start recountTargetMail");
 
@@ -897,7 +943,7 @@ function recountTargetMail() {
       "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treerow");
     
     for (var idx = 0;idx < rows.length;idx++) {
-      // 行先頭要素のチェックボックス値を取得
+      // get a checkbox value of first record
       var chkValue = toBoolean(rows[idx].children[0].getAttribute('value'));
       logger.writeDebug("idx/value=" + idx + "/" + chkValue + "(" + typeof(chkValue) + ")");
 
@@ -923,7 +969,6 @@ function recountTargetMail() {
   logger.writeDebug("end recountTargetMail");
 }
 
-// 振分実行
 function doDistribution() {
   logger.writeDebug("start doDistribution");
 
@@ -937,7 +982,7 @@ function doDistribution() {
   }
 
   try {
-    // ファイル読み込み準備
+    // prepare for reading files
     var file = Components
       .classes['@mozilla.org/file/local;1']
       .createInstance(Components.interfaces.nsIFile);
@@ -961,7 +1006,7 @@ function doDistribution() {
       getInboxFolderByIndex(prefb.getIntPref("sender-distribution.condition.p_inbox"));
     logger.writeDebug("srcFolder.URI=" + srcFolder.URI);
 
-    // メールコピー(移動)用APIの準備
+    // prepare api for mail copy(or move)
     var copyService =
       Components.classes["@mozilla.org/messenger/messagecopyservice;1"]
               .getService(Components.interfaces.nsIMsgCopyService);
@@ -984,14 +1029,13 @@ function doDistribution() {
     var database = srcFolder.msgDatabase;
 
     do {
+      // get mail header infomation from database by message id,
+      // and execute mail transfer using the header.
       //
-      // メール用データベースからメッセージIDを用いてメールヘッダ情報を取得し、
-      // ヘッダ情報を用いてメールコピー(移動)を実行する
       //
-      //
-      // ===sender-distribution-list.txtの構成===
-      // メールアドレス,メールヘッダID
-      //  (同一メールアドレスに対し、ユニークなメールヘッダIDが自動で割り振られている)
+      // ===format of sender-distribution-list.txt===
+      // mail address,mail header id
+      // (unique mail header id is assigned automatically for same mail address)
       //
 
       out.value = "";
@@ -1013,8 +1057,8 @@ function doDistribution() {
       copyService.CopyMessages(srcFolder, array, dstFolder, isMove, null, null, false);
       count++;
 
+      // calculate progress rate in case of debug mode
       if (isDebug) {
-        // 進捗率再計算
         var percentage = (count / mailcount) * 100;
         logger.writeDebug("count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
       }
@@ -1038,24 +1082,24 @@ function doDistribution() {
   return;
 }
 
-// 振分確認画面で振分実行ボタン押下時に実行
+/*
+ * execute in case of pressing distribution execution button.
+ */
 function executeDistribution() {
   logger.writeDebug("start executeDistribution");
 
   try {
-    // checkboxのチェック状態を取得
+    // get number of checked mail address
     var mailAddrAry = getTargetMailAddress();
     if (mailAddrAry.length == 0) {
       alert(stbundle.getLocalizedMessage("sndb.noselect"));
       return;
     }
-  
-    // リストファイル作成
-    createDistibutionListInfo(mailAddrAry);
 
+    createDistibutionListInfo(mailAddrAry);
     doDistribution();
-  
-    // 振り分け情報を消去し、条件再入力を可能にする
+
+    // erase distribution infomations, and initialize condition.
     changeConditionBtn(false);
   } catch(e) {
     logger.writeError("executeDistribution(): " + e);
@@ -1065,7 +1109,9 @@ function executeDistribution() {
   return;
 }
 
-// 振分情報内訳を全削除する
+/*
+ * delete all distibution infomations in treechildren.
+ */
 function clearListItems() {
   logger.writeDebug("start clearListItems");
   try {
@@ -1082,7 +1128,9 @@ function clearListItems() {
   logger.writeDebug("end clearListItems");
 }
 
-// 振分情報詳細に振分情報を追加する
+/*
+ * append distribution to treeitem.
+ */
 function appendDistributionListItem(idx, folder) {
   logger.writeDebug("start appendDistributionListItem");
   logger.writeDebug("idx=" + idx);
@@ -1151,8 +1199,8 @@ function appendDistributionListItem(idx, folder) {
       document.createElementNS(
         "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treeitem");
     valueItem.appendChild(valueRow);
-  
-    // テーブル末尾に行を追加
+
+    // append distribution information to tail of list.
     treechild.appendChild(valueItem);
 
     logger.writeDebug(
@@ -1165,8 +1213,9 @@ function appendDistributionListItem(idx, folder) {
   logger.writeDebug("end appendDistributionListItem");
 }
 
-
-// チェックボックス一括選択
+/*
+ * change all checkboxes status by one click.
+ */
 function changeAllCheckboxStatus() {
   logger.writeDebug("start changeAllCheckboxStatus");
   try {
@@ -1189,6 +1238,9 @@ function changeAllCheckboxStatus() {
   logger.writeDebug("end changeAllCheckboxStatus");
 }
 
+/*
+ * reset all properties.
+ */
 function resetProp() {
   logger.writeDebug("start resetProp");
   try {
@@ -1207,7 +1259,6 @@ function resetProp() {
 
 }
 
-// 強制終了
 function forceFinish() {
   logger.writeDebug("start forceFinish");
   resetProp();
