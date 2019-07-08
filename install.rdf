@@ -35,5 +35,7 @@
 			</Description>
 		</em:targetApplication>
 
+		<em:iconURL>chrome://sender-distribution/content/sender-distribution.png</em:iconURL>
+
 	</Description>
 </RDF>
