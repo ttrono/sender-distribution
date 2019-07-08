@@ -557,7 +557,7 @@ function createDistibutionManageInfo() {
       }
     }
 
-    // 振分対象メール数保存
+    // save a count of mail number(this value is used to the value validation)
     prefb.setIntPref("sender-distribution.condition.mailcount", mailcount);
 
     // output mail information to a manager file.
