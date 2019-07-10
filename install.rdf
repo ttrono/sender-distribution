@@ -6,7 +6,7 @@
 		<em:id>senderdist@gmail.com</em:id>
 		<em:type>2</em:type>
 		<em:name>Sender Distribution</em:name>
-		<em:version>0.3</em:version>
+		<em:version>0.4</em:version>
 		<em:description>distribute mails from inbox folder to temporary folders with the same name as a sender email</em:description>
 		<em:creator>Tetsuro Ono</em:creator>
 		<em:homepageURL>http://twitter.com/tetsuro_ono</em:homepageURL>
