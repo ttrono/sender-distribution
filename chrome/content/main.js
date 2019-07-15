@@ -159,21 +159,21 @@ var senderDist = {
     var isRunning = null;
     try {
       // double runnning check
-      isRunning = prefb.getIntPref("sender-distribution.running");
+      isRunning = this.prefb.getIntPref("sender-distribution.running");
     } catch(e) {
       // nop. exception always occur at first execution.
     }
 
     try {
-      isDebug = prefb.getIntPref("sender-distribution.debug");
+      isDebug = this.prefb.getIntPref("sender-distribution.debug");
     } catch(e) {
       // If undefined, set initial value
       isDebug = false;
-      prefb.setIntPref("sender-distribution.debug", isDebug);
+      this.prefb.setIntPref("sender-distribution.debug", isDebug);
     }
 
     if (isRunning == null || isRunning == -1) {
-      prefb.setIntPref("sender-distribution.running", 1);
+      this.prefb.setIntPref("sender-distribution.running", 1);
       var winopts = "chrome,menubar=yes,status=yes,toolbar=yes";
       window.open("chrome://sender-distribution/content/main.xul", "_blank", winopts);
     } else {
@@ -314,7 +314,7 @@ var senderDist = {
     logger.writeDebug("start checkCondition");
     try {
       try {
-        var p_edit_status = prefb.getIntPref("sender-distribution.condition.p_edit_status");
+        var p_edit_status = this.prefb.getIntPref("sender-distribution.condition.p_edit_status");
         if (p_edit_status != null && p_edit_status == 1) {
           changeConditionBtn(false);
           return;
@@ -363,11 +363,11 @@ var senderDist = {
       }
 
       // If condition check is ok, save conditions as property value.
-      prefb.setIntPref("sender-distribution.condition.p_inbox", p_inbox);
-      prefb.setIntPref("sender-distribution.condition.p_folder", p_folder);
-      prefb.setIntPref("sender-distribution.condition.p_status", p_status);
-      prefb.setIntPref("sender-distribution.condition.p_method", p_method);
-      prefb.setIntPref("sender-distribution.condition.p_edit_status", 1);
+      this.prefb.setIntPref("sender-distribution.condition.p_inbox", p_inbox);
+      this.prefb.setIntPref("sender-distribution.condition.p_folder", p_folder);
+      this.prefb.setIntPref("sender-distribution.condition.p_status", p_status);
+      this.prefb.setIntPref("sender-distribution.condition.p_method", p_method);
+      this.prefb.setIntPref("sender-distribution.condition.p_edit_status", 1);
 
       prepareDistribution();
     } catch(e) {
@@ -391,7 +391,7 @@ var senderDist = {
       } else {
         // in case of pressing cancel button
         bt_prepare_label = stbundle.getLocalizedMessage("sndb.bt_prepare.init");
-        prefb.setIntPref("sender-distribution.condition.p_edit_status", 0);
+        this.prefb.setIntPref("sender-distribution.condition.p_edit_status", 0);
         document.getElementById("bt_recount").setAttribute("disabled", true);
         document.getElementById("bt_execute").setAttribute("disabled", true);
         clearListItems();
@@ -418,7 +418,7 @@ var senderDist = {
     logger.writeDebug("start prepareDistribution");
 
     try {
-      if (prefb.getIntPref("sender-distribution.condition.p_edit_status") == 1) {
+      if (this.prefb.getIntPref("sender-distribution.condition.p_edit_status") == 1) {
         changeConditionBtn(true);
       }
 
@@ -456,8 +456,8 @@ var senderDist = {
 
     var mailcount = 0;
     try {
-      var p_inbox   = prefb.getIntPref("sender-distribution.condition.p_inbox");
-      var p_status  = prefb.getIntPref("sender-distribution.condition.p_status");
+      var p_inbox   = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
+      var p_status  = this.prefb.getIntPref("sender-distribution.condition.p_status");
       var inboxFolder = getInboxFolderByIndex(p_inbox);
 
       if (p_status == 1) {
@@ -514,8 +514,8 @@ var senderDist = {
     try {
       var mailcount = getMailCount();
       var manageAry = new Array();
-      var p_inbox = prefb.getIntPref("sender-distribution.condition.p_inbox");
-      var p_status =prefb.getIntPref("sender-distribution.condition.p_status");
+      var p_inbox = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
+      var p_status =this.prefb.getIntPref("sender-distribution.condition.p_status");
       inboxFolder = getInboxFolderByIndex(p_inbox);
       database = inboxFolder.msgDatabase;
       var enumerator = database.EnumerateMessages();
@@ -557,15 +557,15 @@ var senderDist = {
       }
 
       // save a count of mail number(this value is used to the value validation)
-      prefb.setIntPref("sender-distribution.condition.mailcount", mailcount);
+      this.prefb.setIntPref("sender-distribution.condition.mailcount", mailcount);
 
       // output mail information to a manager file.
       outputDistibutionManagerFile(manageAry, mailcount);
 
-      var p_folder = prefb.getIntPref("sender-distribution.condition.p_folder");
+      var p_folder = this.prefb.getIntPref("sender-distribution.condition.p_folder");
       if (p_folder == 2) {
         // decide distribution folder name using date & time
-        prefb.setCharPref("sender-distribution.condition.p_folder_name", getTime(2));
+        this.prefb.setCharPref("sender-distribution.condition.p_folder_name", getTime(2));
       }
     } catch(e) {
       logger.writeError("createDistibutionManageInfo(): " + e);
@@ -702,8 +702,8 @@ var senderDist = {
     var database;
 
     try {
-      var p_inbox = prefb.getIntPref("sender-distribution.condition.p_inbox");
-      var p_status =prefb.getIntPref("sender-distribution.condition.p_status");
+      var p_inbox = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
+      var p_status =this.prefb.getIntPref("sender-distribution.condition.p_status");
       inboxFolder = getInboxFolderByIndex(p_inbox);
       database = inboxFolder.msgDatabase;
       var enumerator = database.EnumerateMessages();
@@ -793,7 +793,7 @@ var senderDist = {
           folder['count'] = value.split('=')[1];
         } else if (value.match(/^totalcount/)) {
           totalcount = value.split('=')[1];
-          mailcount = prefb.getIntPref("sender-distribution.condition.mailcount");
+          mailcount = this.prefb.getIntPref("sender-distribution.condition.mailcount");
           logger.writeInfo("mailcount=" + mailcount + ", totalcount=" + totalcount);
           if (mailcount != totalcount) {
             logger.writeError("mailcount is not equal to totalcount");
@@ -960,7 +960,7 @@ var senderDist = {
     var lis;
 
     var isMove = false;
-    var method = prefb.getIntPref("sender-distribution.condition.p_method");
+    var method = this.prefb.getIntPref("sender-distribution.condition.p_method");
     if (method == 2) {
       isMove = true
     }
@@ -987,7 +987,7 @@ var senderDist = {
       var count = 0;
       var out = {value: ""};
       var srcFolder =
-        getInboxFolderByIndex(prefb.getIntPref("sender-distribution.condition.p_inbox"));
+        getInboxFolderByIndex(this.prefb.getIntPref("sender-distribution.condition.p_inbox"));
       logger.writeDebug("srcFolder.URI=" + srcFolder.URI);
 
       // prepare api for mail copy(or move)
@@ -1003,7 +1003,7 @@ var senderDist = {
       // and achived the process of moving mail to temporary folder.
       //
       var dstBaseFolder;
-      var subfolder_name = prefb.getCharPref("sender-distribution.condition.p_folder_name");
+      var subfolder_name = this.prefb.getCharPref("sender-distribution.condition.p_folder_name");
       if (srcFolder.containsChildNamed(subfolder_name) == false) {
         srcFolder.createSubfolder(subfolder_name, null);
         logger.writeInfo("created sub folder=" + subfolder_name);
@@ -1146,7 +1146,7 @@ var senderDist = {
       cellCount.setAttribute('editable', false);
 
       var folder_name = "";
-      var p_folder = prefb.getIntPref("sender-distribution.condition.p_folder");
+      var p_folder = this.prefb.getIntPref("sender-distribution.condition.p_folder");
       if (p_folder == 1) {
         folder_name =
           stbundle.getLocalizedMessage("sndb.inbox.title")
@@ -1155,7 +1155,7 @@ var senderDist = {
         folder_name =
           stbundle.getLocalizedMessage("sndb.inbox.title")
           + getFileSeparator()
-          + prefb.getCharPref("sender-distribution.condition.p_folder_name")
+          + this.prefb.getCharPref("sender-distribution.condition.p_folder_name")
           + getFileSeparator() + folder['folder'];
       }
       cellFolder.setAttribute('id', "folder-" + idx);
@@ -1223,14 +1223,14 @@ var senderDist = {
   resetProp : function() {
     logger.writeDebug("start resetProp");
     try {
-      prefb.setIntPref("sender-distribution.running", -1);
-      prefb.setIntPref("sender-distribution.condition.p_inbox", -1);
-      prefb.setIntPref("sender-distribution.condition.p_folder", -1);
-      prefb.setCharPref("sender-distribution.condition.p_folder_name", "");
-      prefb.setIntPref("sender-distribution.condition.p_status", -1);
-      prefb.setIntPref("sender-distribution.condition.p_method", -1);
-      prefb.setIntPref("sender-distribution.condition.p_edit_status", -1);
-      prefb.setIntPref("sender-distribution.condition.mailcount", -1);
+      this.prefb.setIntPref("sender-distribution.running", -1);
+      this.prefb.setIntPref("sender-distribution.condition.p_inbox", -1);
+      this.prefb.setIntPref("sender-distribution.condition.p_folder", -1);
+      this.prefb.setCharPref("sender-distribution.condition.p_folder_name", "");
+      this.prefb.setIntPref("sender-distribution.condition.p_status", -1);
+      this.prefb.setIntPref("sender-distribution.condition.p_method", -1);
+      this.prefb.setIntPref("sender-distribution.condition.p_edit_status", -1);
+      this.prefb.setIntPref("sender-distribution.condition.mailcount", -1);
     } catch(e) {
       logger.writeError("resetProp(): " + e);
     }
