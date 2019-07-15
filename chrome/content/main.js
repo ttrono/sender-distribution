@@ -193,15 +193,15 @@ var senderDist = {
     this.logger.writeDebug("start initScrCondition");
     try {
       // create list of available mail addresses
-      inboxList= getAddressList();
-      if (inboxList == null) {
+      this.inboxList= getAddressList();
+      if (this.inboxList == null) {
         this.logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
       }
       var menulist = document.getElementById("inbox");
-      for (var index = 0;index < inboxList.length;index++) {
-        if (inboxList[index] != "" && inboxList[index] != "null") {
-          menulist.appendItem(inboxList[index], index, "");
+      for (var index = 0;index < this.inboxList.length;index++) {
+        if (this.inboxList[index] != "" && this.inboxList[index] != "null") {
+          menulist.appendItem(this.inboxList[index], index, "");
         }
       }
       if (menulist.itemCount > 0) {
