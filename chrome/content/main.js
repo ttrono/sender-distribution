@@ -1205,11 +1205,11 @@ var senderDist = {
 
       for (var idx = 0;idx < rows.length;idx++) {
         var chkbox = document.getElementById("chk-" + idx);
-        chkbox.setAttribute('value', chkBoxStatus);
-        this.logger.writeDebug("chkbox idx/status = " + idx + "/" + chkBoxStatus);
+        chkbox.setAttribute('value', this.chkBoxStatus);
+        this.logger.writeDebug("chkbox idx/status = " + idx + "/" + this.chkBoxStatus);
       }
 
-      chkBoxStatus = !chkBoxStatus;
+      this.chkBoxStatus = !this.chkBoxStatus;
     } catch(e) {
       this.logger.writeError("changeAllCheckboxStatus(): " + e);
       throw e;
