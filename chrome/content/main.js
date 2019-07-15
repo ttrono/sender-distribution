@@ -60,7 +60,7 @@ var senderDist = {
         foStream.init(file, 0x02 | 0x08 | 0x10, 0664, 0);
 
         this.RTNCD = getCRLF();
-        data = getTime(1) + " <" + level + "> " + data + this.RTNCD;
+        data = this.getTime(1) + " <" + level + "> " + data + this.RTNCD;
         foStream.write(data,data.length);
       } catch(e) {
         if (this.isDebug) alert(e);
@@ -565,7 +565,7 @@ var senderDist = {
       var p_folder = this.prefb.getIntPref("sender-distribution.condition.p_folder");
       if (p_folder == 2) {
         // decide distribution folder name using date & time
-        this.prefb.setCharPref("sender-distribution.condition.p_folder_name", getTime(2));
+        this.prefb.setCharPref("sender-distribution.condition.p_folder_name", this.getTime(2));
       }
     } catch(e) {
       this.logger.writeError("createDistibutionManageInfo(): " + e);
