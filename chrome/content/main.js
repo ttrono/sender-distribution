@@ -51,7 +51,7 @@ var senderDist = {
       try {
         var file = Components.classes['@mozilla.org/file/local;1']
               .createInstance(Components.interfaces.nsIFile);
-        file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_LOG);
+        file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_LOG);
         if (!file.exists()) file.create(file.NORMAL_FILE_TYPE, 0666);
 
         foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
@@ -583,10 +583,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_LIST);
+      file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_LIST);
       if (file.exists()) {
         file.remove(false);
-        this.logger.writeInfo("deleted " + this.propd.path + getFileSeparator() + this.FILENAME_LIST);
+        this.logger.writeInfo("deleted " + this.propd.path + this.getFileSeparator() + this.FILENAME_LIST);
       }
     } catch(e) {
       this.logger.writeError("deleteDistibutionListFile(): " + e);
@@ -608,10 +608,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_LIST);
+      file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_LIST);
       if (!file.exists()) {
         file.create(file.NORMAL_FILE_TYPE, 0666);
-        this.logger.writeInfo("created "+ this.propd.path + getFileSeparator() + this.FILENAME_LIST);
+        this.logger.writeInfo("created "+ this.propd.path + this.getFileSeparator() + this.FILENAME_LIST);
       }
       fileStream = Components
           .classes['@mozilla.org/network/file-output-stream;1']
@@ -652,10 +652,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_MANAGER);
       if (file.exists()) {
         file.remove(false);
-        this.logger.writeInfo("delete " + this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
+        this.logger.writeInfo("delete " + this.propd.path + this.getFileSeparator() + this.FILENAME_MANAGER);
       }
       file.create(file.NORMAL_FILE_TYPE, 0666);
 
@@ -755,7 +755,7 @@ var senderDist = {
       var file = Components
         .classes['@mozilla.org/file/local;1']
         .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_MANAGER);
 
       fileStream = Components
           .classes['@mozilla.org/network/file-input-stream;1']
@@ -970,7 +970,7 @@ var senderDist = {
       var file = Components
         .classes['@mozilla.org/file/local;1']
         .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_LIST);
+      file.initWithPath(this.propd.path + this.getFileSeparator() + this.FILENAME_LIST);
 
       fileStream = Components
         .classes['@mozilla.org/network/file-input-stream;1']
@@ -1150,13 +1150,13 @@ var senderDist = {
       if (p_folder == 1) {
         folder_name =
           this.stbundle.getLocalizedMessage("sndb.inbox.title")
-          + getFileSeparator() + folder['folder'];
+          + this.getFileSeparator() + folder['folder'];
       } else {
         folder_name =
           this.stbundle.getLocalizedMessage("sndb.inbox.title")
-          + getFileSeparator()
+          + this.getFileSeparator()
           + this.prefb.getCharPref("sender-distribution.condition.p_folder_name")
-          + getFileSeparator() + folder['folder'];
+          + this.getFileSeparator() + folder['folder'];
       }
       cellFolder.setAttribute('id', "folder-" + idx);
       cellFolder.setAttribute('label', folder_name);
