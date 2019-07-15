@@ -652,10 +652,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
       if (file.exists()) {
         file.remove(false);
-        this.logger.writeInfo("delete " + this.propd.path + getFileSeparator() + FILENAME_MANAGER);
+        this.logger.writeInfo("delete " + this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
       }
       file.create(file.NORMAL_FILE_TYPE, 0666);
 
@@ -755,7 +755,7 @@ var senderDist = {
       var file = Components
         .classes['@mozilla.org/file/local;1']
         .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_MANAGER);
 
       fileStream = Components
           .classes['@mozilla.org/network/file-input-stream;1']
