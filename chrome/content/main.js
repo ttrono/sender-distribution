@@ -71,16 +71,16 @@ var senderDist = {
       }
     },
     writeDebug : function(data) {
-      if (this.isDebug) this.writeLog(LOG_DEBUG, data);
+      if (this.isDebug) this.writeLog(this.LOG_DEBUG, data);
     },
     writeInfo :  function(data) {
-      if (this.isDebug) this.writeLog(LOG_INFO, data);
+      if (this.isDebug) this.writeLog(this.LOG_INFO, data);
     },
     writeWarn :  function(data) {
-      this.writeLog(LOG_WARN, data);
+      this.writeLog(this.LOG_WARN, data);
     },
     writeError :  function(data) {
-      this.writeLog(LOG_ERROR, data);
+      this.writeLog(this.LOG_ERROR, data);
     }
   },
 
