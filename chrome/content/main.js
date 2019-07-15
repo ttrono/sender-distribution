@@ -39,7 +39,7 @@ var senderDist = {
       try {
         return this._bundle.GetStringFromName(msg);
       } catch(e) {
-        logger.writeError("getLocalizedMessage(): " + e);
+        this.logger.writeError("getLocalizedMessage(): " + e);
         return null;
       }
     }
@@ -179,8 +179,8 @@ var senderDist = {
     } else {
       // stop double running
       alert(this.stbundle.getLocalizedMessage("sndb.running"));
-      logger.writeWarn("Sender Distribution is runnning.");
-      logger.writeWarn("please change the prefference value 'sender-distribution.running' to -1");
+      this.logger.writeWarn("Sender Distribution is runnning.");
+      this.logger.writeWarn("please change the prefference value 'sender-distribution.running' to -1");
     }
   },
 
@@ -190,12 +190,12 @@ var senderDist = {
    * This function is called from onload when initialize window.
    */
   initScrCondition : function() {
-    logger.writeDebug("start initScrCondition");
+    this.logger.writeDebug("start initScrCondition");
     try {
       // create list of available mail addresses
       inboxList= getAddressList();
       if (inboxList == null) {
-        logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
+        this.logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
       }
       var menulist = document.getElementById("inbox");
@@ -213,11 +213,11 @@ var senderDist = {
       document.getElementById("bt_recount").setAttribute("disabled", true);
       document.getElementById("bt_execute").setAttribute("disabled", true);
     } catch(e) {
-      logger.writeError("initScrCondition(): "+e);
+      this.logger.writeError("initScrCondition(): "+e);
       alert(e);
       forceFinish();
     }
-    logger.writeDebug("end initScrCondition");
+    this.logger.writeDebug("end initScrCondition");
   },
 
   /*
@@ -228,7 +228,7 @@ var senderDist = {
    *
    */
   getAddressList : function() {
-    logger.writeDebug("start getAddressList");
+    this.logger.writeDebug("start getAddressList");
 
     var inboxFolders = new Array();
     try {
@@ -247,20 +247,20 @@ var senderDist = {
           servers.queryElementAt(
             index, Components.interfaces.nsIMsgIncomingServer);
         var inboxFolder = GetInboxFolder(server);
-        logger.writeDebug("mail type=" + server.type);
+        this.logger.writeDebug("mail type=" + server.type);
 
         if (inboxFolder != null && server.type == "pop3") {
           inboxFolders.push(server.prettyName);
-          logger.writeInfo("index=" + index + ", target mail address=" + server.prettyName);
+          this.logger.writeInfo("index=" + index + ", target mail address=" + server.prettyName);
         } else {
           // normal null can't judge properly, so set dummy value and make pulldown empty.
           inboxFolders.push("null");
-          logger.writeInfo("index=" + index+", inboxFolder is null");
+          this.logger.writeInfo("index=" + index+", inboxFolder is null");
         }
       }
     } catch(e) {
       // If occur exception, do not terminate forcibly and return tothe caller,
-      logger.writeError("getAddressList(): "+e);
+      this.logger.writeError("getAddressList(): "+e);
       throw e;
     }
 
@@ -269,7 +269,7 @@ var senderDist = {
       alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
       forceFinish();
     }
-    logger.writeDebug("end getAddressList");
+    this.logger.writeDebug("end getAddressList");
     return inboxFolders;
   },
 
@@ -277,7 +277,7 @@ var senderDist = {
    * Get inbox at specified mail address.
    */
   getInboxFolderByIndex : function(index) {
-    logger.writeDebug("start getInboxFolderByIndex");
+    this.logger.writeDebug("start getInboxFolderByIndex");
 
     var inboxFolder;
     try {
@@ -293,15 +293,15 @@ var senderDist = {
       inboxFolder = GetInboxFolder(server);
 
       if (inboxFolder != null) {
-        logger.writeInfo("inbox="+inboxFolder.URI);
+        this.logger.writeInfo("inbox="+inboxFolder.URI);
       } else {
-        logger.writeInfo("inbox is null");
+        this.logger.writeInfo("inbox is null");
       }
     } catch(e) {
-      logger.writeError("getInboxFolderByIndex(): "+e);
+      this.logger.writeError("getInboxFolderByIndex(): "+e);
       throw e;
     }
-    logger.writeDebug("end getInboxFolderByIndex");
+    this.logger.writeDebug("end getInboxFolderByIndex");
     return inboxFolder;
   },
 
@@ -311,7 +311,7 @@ var senderDist = {
    * execute if search button clicked.
    */
   checkCondition : function() {
-    logger.writeDebug("start checkCondition");
+    this.logger.writeDebug("start checkCondition");
     try {
       try {
         var p_edit_status = this.prefb.getIntPref("sender-distribution.condition.p_edit_status");
@@ -326,7 +326,7 @@ var senderDist = {
       // require check: inbox
       var item = document.getElementById("inbox").selectedItem;
       var p_inbox = item != null ? item.value : -1;
-      logger.writeDebug("p_inbox = " + p_inbox);
+      this.logger.writeDebug("p_inbox = " + p_inbox);
       if (p_inbox == -1) {
         alert(this.stbundle.getLocalizedMessage("sndb.condition.inbox.error"));
         return;
@@ -335,7 +335,7 @@ var senderDist = {
       // value check: folder
       item = document.getElementById("folder").selectedItem;
       var p_folder = item != null ? item.value : -1;
-      logger.writeDebug("p_folder = " + p_folder);
+      this.logger.writeDebug("p_folder = " + p_folder);
 
       if (p_folder == -1) {
         alert(this.stbundle.getLocalizedMessage("sndb.condition.folder.error"));
@@ -345,7 +345,7 @@ var senderDist = {
       // require check: mail status
       item = document.getElementById("status").selectedItem;
       var p_status = item != null ? item.value : -1;
-      logger.writeDebug("p_status = " + p_status);
+      this.logger.writeDebug("p_status = " + p_status);
 
       if (p_status == -1) {
         alert(this.stbundle.getLocalizedMessage("sndb.condition.status.error"));
@@ -355,7 +355,7 @@ var senderDist = {
       // require check: mail transfer method
       item = document.getElementById("method").selectedItem;
       var p_method = item != null ? item.value : -1;
-      logger.writeDebug("p_method = " + p_method);
+      this.logger.writeDebug("p_method = " + p_method);
 
       if (p_method == -1) {
         alert(this.stbundle.getLocalizedMessage("sndb.condition.method.error"));
@@ -371,18 +371,18 @@ var senderDist = {
 
       prepareDistribution();
     } catch(e) {
-      logger.writeError("checkCondition(): " + e);
+      this.logger.writeError("checkCondition(): " + e);
       alert(e);
       forceFinish();
     }
-    logger.writeDebug("end checkCondition");
+    this.logger.writeDebug("end checkCondition");
   },
 
   /*
    * change each button state.
    */
   changeConditionBtn : function(isDisabled) {
-    logger.writeDebug("start changeConditionBtn");
+    this.logger.writeDebug("start changeConditionBtn");
 
     try {
       var bt_prepare_label;
@@ -404,10 +404,10 @@ var senderDist = {
       document.getElementById("status").setAttribute("disabled", isDisabled);
       document.getElementById("method").setAttribute("disabled", isDisabled);
     } catch(e) {
-      logger.writeError("changeConditionBtn(): " + e);
+      this.logger.writeError("changeConditionBtn(): " + e);
       throw e;
     }
-    logger.writeDebug("end changeConditionBtn");
+    this.logger.writeDebug("end changeConditionBtn");
   },
 
 
@@ -415,7 +415,7 @@ var senderDist = {
    * prepare mail distribution.
    */
   prepareDistribution : function() {
-    logger.writeDebug("start prepareDistribution");
+    this.logger.writeDebug("start prepareDistribution");
 
     try {
       if (this.prefb.getIntPref("sender-distribution.condition.p_edit_status") == 1) {
@@ -441,10 +441,10 @@ var senderDist = {
         changeConditionBtn(false);
       }
     } catch(e) {
-      logger.writeError("prepareDistribution(): " + e);
+      this.logger.writeError("prepareDistribution(): " + e);
       throw e;
     }
-    logger.writeDebug("end prepareDistribution");
+    this.logger.writeDebug("end prepareDistribution");
   },
 
 
@@ -452,7 +452,7 @@ var senderDist = {
    * get a count of target mail number.
    */
   getMailCount : function() {
-    logger.writeDebug("start getMailCount");
+    this.logger.writeDebug("start getMailCount");
 
     var mailcount = 0;
     try {
@@ -468,10 +468,10 @@ var senderDist = {
         mailcount = inboxFolder.getTotalMessages(false);
       }
     } catch(e) {
-      logger.writeError("getMailCount(): " + e);
+      this.logger.writeError("getMailCount(): " + e);
       throw e;
     }
-    logger.writeDebug("end getMailCount");
+    this.logger.writeDebug("end getMailCount");
     return mailcount;
   },
 
@@ -479,7 +479,7 @@ var senderDist = {
    * retrieve mail address from sender of mail header.
    */
   retrieveMadr : function(headerFrom) {
-    logger.writeDebug("start retrieveMadr");
+    this.logger.writeDebug("start retrieveMadr");
 
     // it is possible that sender isn't enclosed by <>
     email = headerFrom;
@@ -491,10 +491,10 @@ var senderDist = {
         email = headerFrom.substring(start+1, end);
       }
     } catch(e) {
-      logger.writeError("retrieveMadr(): " + e);
+      this.logger.writeError("retrieveMadr(): " + e);
       throw e;
     }
-    logger.writeDebug("end retrieveMadr");
+    this.logger.writeDebug("end retrieveMadr");
     return email;
   },
 
@@ -504,7 +504,7 @@ var senderDist = {
    * output mail informations of specified folder to file.
    */
   createDistibutionManageInfo : function() {
-    logger.writeDebug("start createDistibutionManageInfo");
+    this.logger.writeDebug("start createDistibutionManageInfo");
 
     var count = 0;
     var percentage = 0;
@@ -550,7 +550,7 @@ var senderDist = {
           // calculate progress rate in case of debug mode
           if (this.isDebug) {
             percentage = Math.round((count / mailcount) * 100);
-            logger.writeDebug(
+            this.logger.writeDebug(
               "count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
           }
         }
@@ -568,17 +568,17 @@ var senderDist = {
         this.prefb.setCharPref("sender-distribution.condition.p_folder_name", getTime(2));
       }
     } catch(e) {
-      logger.writeError("createDistibutionManageInfo(): " + e);
+      this.logger.writeError("createDistibutionManageInfo(): " + e);
       throw e;
     } finally {
       database = null;
       inboxFolder.msgDatabase = null;
     }
-    logger.writeDebug("end createDistibutionManageInfo");
+    this.logger.writeDebug("end createDistibutionManageInfo");
   },
 
   deleteDistibutionListFile : function() {
-    logger.writeDebug("start deleteDistibutionListFile");
+    this.logger.writeDebug("start deleteDistibutionListFile");
     try {
       var file = Components
           .classes['@mozilla.org/file/local;1']
@@ -586,13 +586,13 @@ var senderDist = {
       file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LIST);
       if (file.exists()) {
         file.remove(false);
-        logger.writeInfo("deleted " + this.propd.path + getFileSeparator() + FILENAME_LIST);
+        this.logger.writeInfo("deleted " + this.propd.path + getFileSeparator() + FILENAME_LIST);
       }
     } catch(e) {
-      logger.writeError("deleteDistibutionListFile(): " + e);
+      this.logger.writeError("deleteDistibutionListFile(): " + e);
       throw e;
     }
-    logger.writeDebug("end deleteDistibutionListFile");
+    this.logger.writeDebug("end deleteDistibutionListFile");
   },
 
 
@@ -600,7 +600,7 @@ var senderDist = {
    * output a distribution list file using mail header information.
    */
   outputDistibutionListFile : function(header) {
-    logger.writeDebug("start outputDistibutionListFile");
+    this.logger.writeDebug("start outputDistibutionListFile");
 
     var converterStream;
     var fileStream;
@@ -611,7 +611,7 @@ var senderDist = {
       file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LIST);
       if (!file.exists()) {
         file.create(file.NORMAL_FILE_TYPE, 0666);
-        logger.writeInfo("created "+ this.propd.path + getFileSeparator() + FILENAME_LIST);
+        this.logger.writeInfo("created "+ this.propd.path + getFileSeparator() + FILENAME_LIST);
       }
       fileStream = Components
           .classes['@mozilla.org/network/file-output-stream;1']
@@ -627,7 +627,7 @@ var senderDist = {
       converterStream.writeString(
         retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + RTNCD);
     } catch(e) {
-      logger.writeError("outputDistibutionListFile(): " + e);
+      this.logger.writeError("outputDistibutionListFile(): " + e);
       throw e;
     } finally{
       if (converterStream != null) {
@@ -637,14 +637,14 @@ var senderDist = {
         fileStream.close();
       }
     }
-    logger.writeDebug("end outputDistibutionListFile");
+    this.logger.writeDebug("end outputDistibutionListFile");
   },
 
   /*
    * output a manager file(consists of a count of mail per mail address)
    */
   outputDistibutionManagerFile : function(manageAry, mailcount) {
-    logger.writeDebug("start outputDistibutionManagerFile");
+    this.logger.writeDebug("start outputDistibutionManagerFile");
 
     var converterStream;
     var fileStream;
@@ -655,7 +655,7 @@ var senderDist = {
       file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_MANAGER);
       if (file.exists()) {
         file.remove(false);
-        logger.writeInfo("delete " + this.propd.path + getFileSeparator() + FILENAME_MANAGER);
+        this.logger.writeInfo("delete " + this.propd.path + getFileSeparator() + FILENAME_MANAGER);
       }
       file.create(file.NORMAL_FILE_TYPE, 0666);
 
@@ -679,7 +679,7 @@ var senderDist = {
         converterStream.writeString("count=" + manageAry[index]['count'] + RTNCD);
       }
     } catch(e) {
-      logger.writeError("outputDistibutionManagerFile(): " + e);
+      this.logger.writeError("outputDistibutionManagerFile(): " + e);
       throw e;
     } finally{
       if (converterStream != null) {
@@ -689,14 +689,14 @@ var senderDist = {
         fileStream.close();
       }
     }
-    logger.writeDebug("end outputDistibutionManagerFile");
+    this.logger.writeDebug("end outputDistibutionManagerFile");
   },
 
   /*
    * create list file consist of mail address and mail header id.
    */
   createDistibutionListInfo : function(manageAry) {
-    logger.writeDebug("start createDistibutionListInfo");
+    this.logger.writeDebug("start createDistibutionListInfo");
 
     var inboxFolder;
     var database;
@@ -734,20 +734,20 @@ var senderDist = {
         }
       }
     } catch(e) {
-      logger.writeError("createDistibutionListInfo(): " + e);
+      this.logger.writeError("createDistibutionListInfo(): " + e);
       throw e;
     } finally {
       database = null;
       inboxFolder.msgDatabase = null;
     }
-    logger.writeDebug("end createDistibutionListInfo");
+    this.logger.writeDebug("end createDistibutionListInfo");
   },
 
   /*
    * read mail addresses for treechildren from manager file.
    */
   readDistibutionManagerFile : function() {
-    logger.writeDebug("start readDistibutionManagerFile");
+    this.logger.writeDebug("start readDistibutionManagerFile");
 
     var fileStream;
     var lis;
@@ -794,9 +794,9 @@ var senderDist = {
         } else if (value.match(/^totalcount/)) {
           totalcount = value.split('=')[1];
           mailcount = this.prefb.getIntPref("sender-distribution.condition.mailcount");
-          logger.writeInfo("mailcount=" + mailcount + ", totalcount=" + totalcount);
+          this.logger.writeInfo("mailcount=" + mailcount + ", totalcount=" + totalcount);
           if (mailcount != totalcount) {
-            logger.writeError("mailcount is not equal to totalcount");
+            this.logger.writeError("mailcount is not equal to totalcount");
             throw this.stbundle.getLocalizedMessage("sndb.unmatch.count");
           }
         }
@@ -805,7 +805,7 @@ var senderDist = {
         }
       } while(cont);
     } catch(e) {
-      logger.writeError("readDistibutionManagerFile(): " + e);
+      this.logger.writeError("readDistibutionManagerFile(): " + e);
       throw e;
     } finally {
       if (lis != null) {
@@ -831,7 +831,7 @@ var senderDist = {
       return 0;
     });
 
-    logger.writeDebug("end readDistibutionManagerFile");
+    this.logger.writeDebug("end readDistibutionManagerFile");
     return folders;
   },
 
@@ -839,21 +839,21 @@ var senderDist = {
    * Get distribution infomation from manager file.
    */
   getDistibutionInfo : function() {
-    logger.writeDebug("start getDistibutionInfo");
+    this.logger.writeDebug("start getDistibutionInfo");
 
     var managerAry = null;
     try {
       // reconfirm a count of selected mail address
       managerAry = readDistibutionManagerFile();
       if (managerAry.length == 0) {
-        logger.writeWarn("there are no mail by selected conditions.");
+        this.logger.writeWarn("there are no mail by selected conditions.");
         alert(this.stbundle.getLocalizedMessage("sndb.info.nomail"));
       }
     } catch(e) {
-      logger.writeError("getDistibutionInfo(): " + e);
+      this.logger.writeError("getDistibutionInfo(): " + e);
       throw e;
     } finally {
-      logger.writeDebug("end getDistibutionInfo");
+      this.logger.writeDebug("end getDistibutionInfo");
     }
     return managerAry;
   },
@@ -862,7 +862,7 @@ var senderDist = {
    * show distribution infomation(main number and mail list).
    */
   showDistibutionInfoList : function(managerAry) {
-    logger.writeDebug("start showDistibutionInfo");
+    this.logger.writeDebug("start showDistibutionInfo");
 
     try {
       var mailcount = getMailCount();
@@ -875,7 +875,7 @@ var senderDist = {
         appendDistributionListItem(index, folder);
       }
     } catch(e) {
-      logger.writeError("showDistibutionInfo(): " + e);
+      this.logger.writeError("showDistibutionInfo(): " + e);
       throw e;
     }
     return;
@@ -885,7 +885,7 @@ var senderDist = {
    * retrieve checked mail address.
    */
   getTargetMailAddress : function() {
-    logger.writeDebug("start getTargetMailAddress");
+    this.logger.writeDebug("start getTargetMailAddress");
 
     var mailAddrAry;
 
@@ -901,22 +901,22 @@ var senderDist = {
         if (chkValue) {
           var cell = document.getElementById("mailaddr-" + idx);
           var email = cell.getAttribute('label');
-          logger.writeDebug("email=" + email);
+          this.logger.writeDebug("email=" + email);
 
           mailAddrAry.push(email);
         }
       }
     } catch(e) {
-      logger.writeError("getTargetMailAddress(): " + e);
+      this.logger.writeError("getTargetMailAddress(): " + e);
       throw e;
     }
 
-    logger.writeDebug("end getTargetMailAddress");
+    this.logger.writeDebug("end getTargetMailAddress");
     return mailAddrAry;
   },
 
   recountTargetMail : function() {
-    logger.writeDebug("start recountTargetMail");
+    this.logger.writeDebug("start recountTargetMail");
 
     try {
       var listbox = document.getElementById("MailAddrListBox");
@@ -929,14 +929,14 @@ var senderDist = {
       for (var idx = 0;idx < rows.length;idx++) {
         // get a checkbox value of first record
         var chkValue = toBoolean(rows[idx].children[0].getAttribute('value'));
-        logger.writeDebug("idx/value=" + idx + "/" + chkValue + "(" + typeof(chkValue) + ")");
+        this.logger.writeDebug("idx/value=" + idx + "/" + chkValue + "(" + typeof(chkValue) + ")");
 
         if (chkValue) {
           var cell = document.getElementById("mailaddr-" + idx);
           var email = cell.getAttribute('label');
           cell = document.getElementById("cnt-" + idx);
           var cnt = cell.getAttribute('label');
-          logger.writeDebug("email/cnt=" + email + "/" +cnt);
+          this.logger.writeDebug("email/cnt=" + email + "/" +cnt);
 
           totalCnt+=parseInt(cnt, 10);
           totalMailAdrCnt++;
@@ -946,15 +946,15 @@ var senderDist = {
       var distinfo = document.getElementById("distinfo");
       distinfo.setAttribute("value", totalMailAdrCnt + "/" + totalCnt);
     } catch(e) {
-      logger.writeError("recountTargetMail(): " + e);
+      this.logger.writeError("recountTargetMail(): " + e);
       alert(e);
       forceFinish();
     }
-    logger.writeDebug("end recountTargetMail");
+    this.logger.writeDebug("end recountTargetMail");
   },
 
   doDistribution : function() {
-    logger.writeDebug("start doDistribution");
+    this.logger.writeDebug("start doDistribution");
 
     var fileStream;
     var lis;
@@ -988,7 +988,7 @@ var senderDist = {
       var out = {value: ""};
       var srcFolder =
         getInboxFolderByIndex(this.prefb.getIntPref("sender-distribution.condition.p_inbox"));
-      logger.writeDebug("srcFolder.URI=" + srcFolder.URI);
+      this.logger.writeDebug("srcFolder.URI=" + srcFolder.URI);
 
       // prepare api for mail copy(or move)
       var copyService =
@@ -1006,7 +1006,7 @@ var senderDist = {
       var subfolder_name = this.prefb.getCharPref("sender-distribution.condition.p_folder_name");
       if (srcFolder.containsChildNamed(subfolder_name) == false) {
         srcFolder.createSubfolder(subfolder_name, null);
-        logger.writeInfo("created sub folder=" + subfolder_name);
+        this.logger.writeInfo("created sub folder=" + subfolder_name);
       }
       dstBaseFolder = srcFolder.findSubFolder(subfolder_name);
 
@@ -1027,10 +1027,10 @@ var senderDist = {
 
         if (dstBaseFolder.containsChildNamed(record[0]) == false) {
           dstBaseFolder.createSubfolder(record[0], null);
-          logger.writeInfo("created sub folder=" + record[0]);
+          this.logger.writeInfo("created sub folder=" + record[0]);
         }
         var dstFolder = dstBaseFolder.findSubFolder(record[0]);
-        logger.writeDebug("folder=" + dstFolder.URI + ",msgid=" + record[1]);
+        this.logger.writeDebug("folder=" + dstFolder.URI + ",msgid=" + record[1]);
 
         var msg = database.getMsgHdrForMessageID(record[1]);
         var array = Components.classes["@mozilla.org/array;1"]
@@ -1043,12 +1043,12 @@ var senderDist = {
         // calculate progress rate in case of debug mode
         if (this.isDebug) {
           var percentage = (count / mailcount) * 100;
-          logger.writeDebug("count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
+          this.logger.writeDebug("count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
         }
       } while(cont);
       alert(this.stbundle.getLocalizedMessage("sndb.finish"));
     } catch(e) {
-      logger.writeError("doDistribution(): " + e);
+      this.logger.writeError("doDistribution(): " + e);
       throw e;
     } finally {
       if (lis != null) {
@@ -1060,7 +1060,7 @@ var senderDist = {
       database = null;
       srcFolder.msgDatabase = null;
     }
-    logger.writeDebug("end doDistribution");
+    this.logger.writeDebug("end doDistribution");
     return;
   },
 
@@ -1068,7 +1068,7 @@ var senderDist = {
    * execute in case of pressing distribution execution button.
    */
   executeDistribution : function() {
-    logger.writeDebug("start executeDistribution");
+    this.logger.writeDebug("start executeDistribution");
 
     try {
       // get number of checked mail address
@@ -1084,10 +1084,10 @@ var senderDist = {
       // erase distribution infomations, and initialize condition.
       changeConditionBtn(false);
     } catch(e) {
-      logger.writeError("executeDistribution(): " + e);
+      this.logger.writeError("executeDistribution(): " + e);
       forceFinish();
     }
-    logger.writeDebug("end executeDistribution");
+    this.logger.writeDebug("end executeDistribution");
     return;
   },
 
@@ -1095,7 +1095,7 @@ var senderDist = {
    * delete all distibution infomations in treechildren.
    */
   clearListItems : function() {
-    logger.writeDebug("start clearListItems");
+    this.logger.writeDebug("start clearListItems");
     try {
       var treechild = document.getElementById("tc");
       while (treechild.firstChild) {
@@ -1103,18 +1103,18 @@ var senderDist = {
       }
       document.getElementById("distinfo").setAttribute("value", "-/-");
     } catch(e) {
-      logger.writeError("clearListItems(): " + e);
+      this.logger.writeError("clearListItems(): " + e);
       throw e;
     }
-    logger.writeDebug("end clearListItems");
+    this.logger.writeDebug("end clearListItems");
   },
 
   /*
    * append distribution to treeitem.
    */
   appendDistributionListItem : function(idx, folder) {
-    logger.writeDebug("start appendDistributionListItem");
-    logger.writeDebug("idx=" + idx);
+    this.logger.writeDebug("start appendDistributionListItem");
+    this.logger.writeDebug("idx=" + idx);
     try {
       var treechild = document.getElementById("tc");
       var cellChkBox =
@@ -1164,7 +1164,7 @@ var senderDist = {
       cellFolder.setAttribute('crop', "end");
       cellFolder.setAttribute('editable', false);
 
-      logger.writeDebug(
+      this.logger.writeDebug(
         "addr=" + folder['folder'] + ",count=" + folder['count'] + ",dstfolder=" + folder_name);
 
       var valueRow =
@@ -1184,20 +1184,20 @@ var senderDist = {
       // append distribution information to tail of list.
       treechild.appendChild(valueItem);
 
-      logger.writeDebug(
+      this.logger.writeDebug(
         "addr=" + folder['folder'] + ",count=" + folder['count'] + ",dstfolder=" + folder_name);
     } catch(e) {
-      logger.writeError("appendDistributionListItem(): " + e);
+      this.logger.writeError("appendDistributionListItem(): " + e);
       throw e;
     }
-    logger.writeDebug("end appendDistributionListItem");
+    this.logger.writeDebug("end appendDistributionListItem");
   },
 
   /*
    * change all checkboxes status by one click.
    */
   changeAllCheckboxStatus : function() {
-    logger.writeDebug("start changeAllCheckboxStatus");
+    this.logger.writeDebug("start changeAllCheckboxStatus");
     try {
       var listbox = document.getElementById("MailAddrListBox");
       var rows = listbox.getElementsByTagNameNS(
@@ -1206,22 +1206,22 @@ var senderDist = {
       for (var idx = 0;idx < rows.length;idx++) {
         var chkbox = document.getElementById("chk-" + idx);
         chkbox.setAttribute('value', chkBoxStatus);
-        logger.writeDebug("chkbox idx/status = " + idx + "/" + chkBoxStatus);
+        this.logger.writeDebug("chkbox idx/status = " + idx + "/" + chkBoxStatus);
       }
 
       chkBoxStatus = !chkBoxStatus;
     } catch(e) {
-      logger.writeError("changeAllCheckboxStatus(): " + e);
+      this.logger.writeError("changeAllCheckboxStatus(): " + e);
       throw e;
     }
-    logger.writeDebug("end changeAllCheckboxStatus");
+    this.logger.writeDebug("end changeAllCheckboxStatus");
   },
 
   /*
    * reset all properties.
    */
   resetProp : function() {
-    logger.writeDebug("start resetProp");
+    this.logger.writeDebug("start resetProp");
     try {
       this.prefb.setIntPref("sender-distribution.running", -1);
       this.prefb.setIntPref("sender-distribution.condition.p_inbox", -1);
@@ -1232,16 +1232,16 @@ var senderDist = {
       this.prefb.setIntPref("sender-distribution.condition.p_edit_status", -1);
       this.prefb.setIntPref("sender-distribution.condition.mailcount", -1);
     } catch(e) {
-      logger.writeError("resetProp(): " + e);
+      this.logger.writeError("resetProp(): " + e);
     }
-    logger.writeDebug("end resetProp");
+    this.logger.writeDebug("end resetProp");
 
   },
 
   forceFinish : function() {
-    logger.writeDebug("start forceFinish");
+    this.logger.writeDebug("start forceFinish");
     resetProp();
-    logger.writeDebug("end forceFinish");
+    this.logger.writeDebug("end forceFinish");
     window.close();
   }
 };
