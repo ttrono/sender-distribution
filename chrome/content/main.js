@@ -3,38 +3,38 @@ var senderDist = {
   //================================
   // global variables
   //================================
-  var inboxList = null;
-  var mailcount = 0;
-  var chkBoxStatus = false;
+  inboxList: null,
+  mailcount: 0,
+  chkBoxStatus: false,
 
   //================================
   // constant
   //================================
-  var CHARSET = 'UTF-8';
-  var RTNCD = "\r\n";
-  var FILENAME_LOG = 'sender-distribution.log';
-  var FILENAME_MANAGER = 'sender-distribution-manager.txt';
-  var FILENAME_LIST = 'sender-distribution-list.txt';
+  CHARSET: 'UTF-8',
+  RTNCD  : "\r\n",
+  FILENAME_LOG    : 'sender-distribution.log',
+  FILENAME_MANAGER: 'sender-distribution-manager.txt',
+  FILENAME_LIST   : 'sender-distribution-list.txt',
 
-  var LOG_DEBUG = "DEBUG";
-  var LOG_INFO = "INFO";
-  var LOG_WARN = "WARN";
-  var LOG_ERROR = "ERROR";
+  LOG_DEBUG: "DEBUG",
+  LOG_INFO : "INFO",
+  LOG_WARN : "WARN",
+  LOG_ERROR: "ERROR",
 
   // change enable or disable by settings editor
-  var isDebug = false;
+  isDebug: false,
 
-  var prefb = Components.classes["@mozilla.org/preferences-service;1"]
-           .getService(Components.interfaces.nsIPrefBranch);
+  prefb: Components.classes["@mozilla.org/preferences-service;1"]
+       .getService(Components.interfaces.nsIPrefBranch),
 
-  var prefs = Components.classes["@mozilla.org/preferences-service;1"]
-           .getService(Components.interfaces.nsIPrefService);
+  prefs: Components.classes["@mozilla.org/preferences-service;1"]
+       .getService(Components.interfaces.nsIPrefService),
 
-  var propd = Components.classes["@mozilla.org/file/directory_service;1"]
-           .getService(Components.interfaces.nsIProperties)
-           .get("ProfD", Components.interfaces.nsIFile);
+  propd: Components.classes["@mozilla.org/file/directory_service;1"]
+       .getService(Components.interfaces.nsIProperties)
+       .get("ProfD", Components.interfaces.nsIFile),
 
-  var stbundle = {
+  stbundle: {
     _bundle: Components.classes["@mozilla.org/intl/stringbundle;1"]
           .getService(Components.interfaces.nsIStringBundleService)
            .createBundle("chrome://sender-distribution/locale/sender-distribution.properties"),
@@ -46,9 +46,9 @@ var senderDist = {
         return null;
       }
     }
-  };
+  },
 
-  var logger = {
+  logger: {
     writeLog : function(level, data) {
       var foStream;
       try {
@@ -85,25 +85,25 @@ var senderDist = {
     writeError :  function(data) {
       this.writeLog(LOG_ERROR, data);
     }
-  }
+  },
 
-  var accountManager
-    = Components.classes["@mozilla.org/messenger/account-manager;1"]
-              .getService(Components.interfaces.nsIMsgAccountManager);
+  accountManager:
+    Components.classes["@mozilla.org/messenger/account-manager;1"]
+              .getService(Components.interfaces.nsIMsgAccountManager),
 
 
   //================================
   // common function
   //================================
-  function toBoolean (data) {
+  toBoolean : function(data) {
     return data.toLowerCase() === 'true';
-  }
+  },
 
-  function zeroPadding(value, length){
+  zeroPadding : function(value, length){
       return ('0000000000' + value).slice(-length);
-  }
+  },
 
-  function getTime(pattern) {
+  getTime : function(pattern) {
     var currDate = new Date();
     var timeMsg = "";
     var year  = currDate.getFullYear();
@@ -122,9 +122,9 @@ var senderDist = {
       timeMsg = new String(year).concat(month,day,hour,min,sec);
     }
     return timeMsg;
-  }
+  },
 
-  function getCRLF(){
+  getCRLF : function(){
     var agent = navigator.userAgent;
     if (agent.indexOf("Win") >=0){
       return "\r\n";
@@ -134,9 +134,9 @@ var senderDist = {
       // Linux
       return "\n";
     }
-  }
+  },
 
-  function getFileSeparator(){
+  getFileSeparator : function(){
     var agent=navigator.userAgent;
     if (agent.indexOf("Win") >=0){
       return "\\";
@@ -146,7 +146,7 @@ var senderDist = {
       // Linux
       return "/";
     }
-  }
+  },
 
 
   //================================
@@ -158,7 +158,7 @@ var senderDist = {
    *
    * This window is called by menu bar.
    */
-  function openScrCondition() {
+  openScrCondition : function() {
     var isRunning = null;
     try {
       // double runnning check
@@ -185,14 +185,14 @@ var senderDist = {
       logger.writeWarn("Sender Distribution is runnning.");
       logger.writeWarn("please change the prefference value 'sender-distribution.running' to -1");
     }
-  }
+  },
 
   /*
    * Initialize conditions.
    *
    * This function is called from onload when initialize window.
    */
-  function initScrCondition() {
+  initScrCondition : function() {
     logger.writeDebug("start initScrCondition");
     try {
       // create list of available mail addresses
@@ -221,7 +221,7 @@ var senderDist = {
       forceFinish();
     }
     logger.writeDebug("end initScrCondition");
-  }
+  },
 
   /*
    * Get mail address list (POP3 only)
@@ -230,7 +230,7 @@ var senderDist = {
    * ex: folder name length can't match email address length.
    *
    */
-  function getAddressList() {
+  getAddressList : function() {
     logger.writeDebug("start getAddressList");
 
     var inboxFolders = new Array();
@@ -274,12 +274,12 @@ var senderDist = {
     }
     logger.writeDebug("end getAddressList");
     return inboxFolders;
-  }
+  },
 
   /*
    * Get inbox at specified mail address.
    */
-  function getInboxFolderByIndex(index) {
+  getInboxFolderByIndex : function(index) {
     logger.writeDebug("start getInboxFolderByIndex");
 
     var inboxFolder;
@@ -306,14 +306,14 @@ var senderDist = {
     }
     logger.writeDebug("end getInboxFolderByIndex");
     return inboxFolder;
-  }
+  },
 
   /*
    * check distribution conditions.
    *
    * execute if search button clicked.
    */
-  function checkCondition() {
+  checkCondition : function() {
     logger.writeDebug("start checkCondition");
     try {
       try {
@@ -379,12 +379,12 @@ var senderDist = {
       forceFinish();
     }
     logger.writeDebug("end checkCondition");
-  }
+  },
 
   /*
    * change each button state.
    */
-  function changeConditionBtn(isDisabled) {
+  changeConditionBtn : function(isDisabled) {
     logger.writeDebug("start changeConditionBtn");
 
     try {
@@ -411,13 +411,13 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end changeConditionBtn");
-  }
+  },
 
 
   /*
    * prepare mail distribution.
    */
-  function prepareDistribution() {
+  prepareDistribution : function() {
     logger.writeDebug("start prepareDistribution");
 
     try {
@@ -448,13 +448,13 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end prepareDistribution");
-  }
+  },
 
 
   /*
    * get a count of target mail number.
    */
-  function getMailCount() {
+  getMailCount : function() {
     logger.writeDebug("start getMailCount");
 
     var mailcount = 0;
@@ -476,12 +476,12 @@ var senderDist = {
     }
     logger.writeDebug("end getMailCount");
     return mailcount;
-  }
+  },
 
   /*
    * retrieve mail address from sender of mail header.
    */
-  function retrieveMadr(headerFrom) {
+  retrieveMadr : function(headerFrom) {
     logger.writeDebug("start retrieveMadr");
 
     // it is possible that sender isn't enclosed by <>
@@ -499,14 +499,14 @@ var senderDist = {
     }
     logger.writeDebug("end retrieveMadr");
     return email;
-  }
+  },
 
   /*
    * create a distribution manager information.
    *
    * output mail informations of specified folder to file.
    */
-  function createDistibutionManageInfo() {
+  createDistibutionManageInfo : function() {
     logger.writeDebug("start createDistibutionManageInfo");
 
     var count = 0;
@@ -578,9 +578,9 @@ var senderDist = {
       inboxFolder.msgDatabase = null;
     }
     logger.writeDebug("end createDistibutionManageInfo");
-  }
+  },
 
-  function deleteDistibutionListFile() {
+  deleteDistibutionListFile : function() {
     logger.writeDebug("start deleteDistibutionListFile");
     try {
       var file = Components
@@ -596,13 +596,13 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end deleteDistibutionListFile");
-  }
+  },
 
 
   /*
    * output a distribution list file using mail header information.
    */
-  function outputDistibutionListFile(header) {
+  outputDistibutionListFile : function(header) {
     logger.writeDebug("start outputDistibutionListFile");
 
     var converterStream;
@@ -641,12 +641,12 @@ var senderDist = {
       }
     }
     logger.writeDebug("end outputDistibutionListFile");
-  }
+  },
 
   /*
    * output a manager file(consists of a count of mail per mail address)
    */
-  function outputDistibutionManagerFile(manageAry, mailcount) {
+  outputDistibutionManagerFile : function(manageAry, mailcount) {
     logger.writeDebug("start outputDistibutionManagerFile");
 
     var converterStream;
@@ -693,12 +693,12 @@ var senderDist = {
       }
     }
     logger.writeDebug("end outputDistibutionManagerFile");
-  }
+  },
 
   /*
    * create list file consist of mail address and mail header id.
    */
-  function createDistibutionListInfo(manageAry) {
+  createDistibutionListInfo : function(manageAry) {
     logger.writeDebug("start createDistibutionListInfo");
 
     var inboxFolder;
@@ -744,12 +744,12 @@ var senderDist = {
       inboxFolder.msgDatabase = null;
     }
     logger.writeDebug("end createDistibutionListInfo");
-  }
+  },
 
   /*
    * read mail addresses for treechildren from manager file.
    */
-  function readDistibutionManagerFile() {
+  readDistibutionManagerFile : function() {
     logger.writeDebug("start readDistibutionManagerFile");
 
     var fileStream;
@@ -836,12 +836,12 @@ var senderDist = {
 
     logger.writeDebug("end readDistibutionManagerFile");
     return folders;
-  }
+  },
 
   /*
    * Get distribution infomation from manager file.
    */
-  function getDistibutionInfo() {
+  getDistibutionInfo : function() {
     logger.writeDebug("start getDistibutionInfo");
 
     var managerAry = null;
@@ -859,12 +859,12 @@ var senderDist = {
       logger.writeDebug("end getDistibutionInfo");
     }
     return managerAry;
-  }
+  },
 
   /*
    * show distribution infomation(main number and mail list).
    */
-  function showDistibutionInfoList(managerAry) {
+  showDistibutionInfoList : function(managerAry) {
     logger.writeDebug("start showDistibutionInfo");
 
     try {
@@ -882,12 +882,12 @@ var senderDist = {
       throw e;
     }
     return;
-  }
+  },
 
   /*
    * retrieve checked mail address.
    */
-  function getTargetMailAddress() {
+  getTargetMailAddress : function() {
     logger.writeDebug("start getTargetMailAddress");
 
     var mailAddrAry;
@@ -916,9 +916,9 @@ var senderDist = {
 
     logger.writeDebug("end getTargetMailAddress");
     return mailAddrAry;
-  }
+  },
 
-  function recountTargetMail() {
+  recountTargetMail : function() {
     logger.writeDebug("start recountTargetMail");
 
     try {
@@ -954,9 +954,9 @@ var senderDist = {
       forceFinish();
     }
     logger.writeDebug("end recountTargetMail");
-  }
+  },
 
-  function doDistribution() {
+  doDistribution : function() {
     logger.writeDebug("start doDistribution");
 
     var fileStream;
@@ -1065,12 +1065,12 @@ var senderDist = {
     }
     logger.writeDebug("end doDistribution");
     return;
-  }
+  },
 
   /*
    * execute in case of pressing distribution execution button.
    */
-  function executeDistribution() {
+  executeDistribution : function() {
     logger.writeDebug("start executeDistribution");
 
     try {
@@ -1092,12 +1092,12 @@ var senderDist = {
     }
     logger.writeDebug("end executeDistribution");
     return;
-  }
+  },
 
   /*
    * delete all distibution infomations in treechildren.
    */
-  function clearListItems() {
+  clearListItems : function() {
     logger.writeDebug("start clearListItems");
     try {
       var treechild = document.getElementById("tc");
@@ -1110,12 +1110,12 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end clearListItems");
-  }
+  },
 
   /*
    * append distribution to treeitem.
    */
-  function appendDistributionListItem(idx, folder) {
+  appendDistributionListItem : function(idx, folder) {
     logger.writeDebug("start appendDistributionListItem");
     logger.writeDebug("idx=" + idx);
     try {
@@ -1194,12 +1194,12 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end appendDistributionListItem");
-  }
+  },
 
   /*
    * change all checkboxes status by one click.
    */
-  function changeAllCheckboxStatus() {
+  changeAllCheckboxStatus : function() {
     logger.writeDebug("start changeAllCheckboxStatus");
     try {
       var listbox = document.getElementById("MailAddrListBox");
@@ -1218,12 +1218,12 @@ var senderDist = {
       throw e;
     }
     logger.writeDebug("end changeAllCheckboxStatus");
-  }
+  },
 
   /*
    * reset all properties.
    */
-  function resetProp() {
+  resetProp : function() {
     logger.writeDebug("start resetProp");
     try {
       prefb.setIntPref("sender-distribution.running", -1);
@@ -1239,9 +1239,9 @@ var senderDist = {
     }
     logger.writeDebug("end resetProp");
 
-  }
+  },
 
-  function forceFinish() {
+  forceFinish : function() {
     logger.writeDebug("start forceFinish");
     resetProp();
     logger.writeDebug("end forceFinish");
