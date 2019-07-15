@@ -240,7 +240,7 @@ var senderDist = {
       if (servers == null || servers.length == 0) {
         // force finish if not exists inbox.
         alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
-        forceFinish();
+        this.forceFinish();
       }
       for (var index=0;index < servers.length;index++) {
         var server =
@@ -267,7 +267,7 @@ var senderDist = {
     // force finish if not exists inbox.
     if (inboxFolders.length == 0) {
       alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
-      forceFinish();
+      this.forceFinish();
     }
     this.logger.writeDebug("end getAddressList");
     return inboxFolders;
@@ -286,7 +286,7 @@ var senderDist = {
       // force finish if no server infomations.
       if (servers == null || servers.length == 0) {
         alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
-        forceFinish();
+        this.forceFinish();
       }
       var server =
         servers.queryElementAt(index, Components.interfaces.nsIMsgIncomingServer);
@@ -373,7 +373,7 @@ var senderDist = {
     } catch(e) {
       this.logger.writeError("checkCondition(): " + e);
       alert(e);
-      forceFinish();
+      this.forceFinish();
     }
     this.logger.writeDebug("end checkCondition");
   },
@@ -948,7 +948,7 @@ var senderDist = {
     } catch(e) {
       this.logger.writeError("recountTargetMail(): " + e);
       alert(e);
-      forceFinish();
+      this.forceFinish();
     }
     this.logger.writeDebug("end recountTargetMail");
   },
@@ -1085,7 +1085,7 @@ var senderDist = {
       changeConditionBtn(false);
     } catch(e) {
       this.logger.writeError("executeDistribution(): " + e);
-      forceFinish();
+      this.forceFinish();
     }
     this.logger.writeDebug("end executeDistribution");
     return;
