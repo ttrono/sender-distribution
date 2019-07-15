@@ -178,7 +178,7 @@ var senderDist = {
       window.open("chrome://sender-distribution/content/main.xul", "_blank", winopts);
     } else {
       // stop double running
-      alert(stbundle.getLocalizedMessage("sndb.running"));
+      alert(this.stbundle.getLocalizedMessage("sndb.running"));
       logger.writeWarn("Sender Distribution is runnning.");
       logger.writeWarn("please change the prefference value 'sender-distribution.running' to -1");
     }
@@ -195,7 +195,7 @@ var senderDist = {
       // create list of available mail addresses
       inboxList= getAddressList();
       if (inboxList == null) {
-        logger.writeWarn(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
+        logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
       }
       var menulist = document.getElementById("inbox");
@@ -239,7 +239,7 @@ var senderDist = {
       var servers = accountManager.allServers;
       if (servers == null || servers.length == 0) {
         // force finish if not exists inbox.
-        alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
+        alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
       }
       for (var index=0;index < servers.length;index++) {
@@ -266,7 +266,7 @@ var senderDist = {
 
     // force finish if not exists inbox.
     if (inboxFolders.length == 0) {
-      alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
+      alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
       forceFinish();
     }
     logger.writeDebug("end getAddressList");
@@ -285,7 +285,7 @@ var senderDist = {
 
       // force finish if no server infomations.
       if (servers == null || servers.length == 0) {
-        alert(stbundle.getLocalizedMessage("sndb.list.inbox.none"));
+        alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
       }
       var server =
@@ -328,7 +328,7 @@ var senderDist = {
       var p_inbox = item != null ? item.value : -1;
       logger.writeDebug("p_inbox = " + p_inbox);
       if (p_inbox == -1) {
-        alert(stbundle.getLocalizedMessage("sndb.condition.inbox.error"));
+        alert(this.stbundle.getLocalizedMessage("sndb.condition.inbox.error"));
         return;
       }
 
@@ -338,7 +338,7 @@ var senderDist = {
       logger.writeDebug("p_folder = " + p_folder);
 
       if (p_folder == -1) {
-        alert(stbundle.getLocalizedMessage("sndb.condition.folder.error"));
+        alert(this.stbundle.getLocalizedMessage("sndb.condition.folder.error"));
         return;
       }
 
@@ -348,7 +348,7 @@ var senderDist = {
       logger.writeDebug("p_status = " + p_status);
 
       if (p_status == -1) {
-        alert(stbundle.getLocalizedMessage("sndb.condition.status.error"));
+        alert(this.stbundle.getLocalizedMessage("sndb.condition.status.error"));
         return;
       }
 
@@ -358,7 +358,7 @@ var senderDist = {
       logger.writeDebug("p_method = " + p_method);
 
       if (p_method == -1) {
-        alert(stbundle.getLocalizedMessage("sndb.condition.method.error"));
+        alert(this.stbundle.getLocalizedMessage("sndb.condition.method.error"));
         return;
       }
 
@@ -387,10 +387,10 @@ var senderDist = {
     try {
       var bt_prepare_label;
       if (isDisabled) {
-        bt_prepare_label = stbundle.getLocalizedMessage("sndb.bt_prepare.cancel");
+        bt_prepare_label = this.stbundle.getLocalizedMessage("sndb.bt_prepare.cancel");
       } else {
         // in case of pressing cancel button
-        bt_prepare_label = stbundle.getLocalizedMessage("sndb.bt_prepare.init");
+        bt_prepare_label = this.stbundle.getLocalizedMessage("sndb.bt_prepare.init");
         this.prefb.setIntPref("sender-distribution.condition.p_edit_status", 0);
         document.getElementById("bt_recount").setAttribute("disabled", true);
         document.getElementById("bt_execute").setAttribute("disabled", true);
@@ -797,7 +797,7 @@ var senderDist = {
           logger.writeInfo("mailcount=" + mailcount + ", totalcount=" + totalcount);
           if (mailcount != totalcount) {
             logger.writeError("mailcount is not equal to totalcount");
-            throw stbundle.getLocalizedMessage("sndb.unmatch.count");
+            throw this.stbundle.getLocalizedMessage("sndb.unmatch.count");
           }
         }
         if (cont == false && folder != null) {
@@ -847,7 +847,7 @@ var senderDist = {
       managerAry = readDistibutionManagerFile();
       if (managerAry.length == 0) {
         logger.writeWarn("there are no mail by selected conditions.");
-        alert(stbundle.getLocalizedMessage("sndb.info.nomail"));
+        alert(this.stbundle.getLocalizedMessage("sndb.info.nomail"));
       }
     } catch(e) {
       logger.writeError("getDistibutionInfo(): " + e);
@@ -1046,7 +1046,7 @@ var senderDist = {
           logger.writeDebug("count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
         }
       } while(cont);
-      alert(stbundle.getLocalizedMessage("sndb.finish"));
+      alert(this.stbundle.getLocalizedMessage("sndb.finish"));
     } catch(e) {
       logger.writeError("doDistribution(): " + e);
       throw e;
@@ -1074,7 +1074,7 @@ var senderDist = {
       // get number of checked mail address
       var mailAddrAry = getTargetMailAddress();
       if (mailAddrAry.length == 0) {
-        alert(stbundle.getLocalizedMessage("sndb.noselect"));
+        alert(this.stbundle.getLocalizedMessage("sndb.noselect"));
         return;
       }
 
@@ -1149,11 +1149,11 @@ var senderDist = {
       var p_folder = this.prefb.getIntPref("sender-distribution.condition.p_folder");
       if (p_folder == 1) {
         folder_name =
-          stbundle.getLocalizedMessage("sndb.inbox.title")
+          this.stbundle.getLocalizedMessage("sndb.inbox.title")
           + getFileSeparator() + folder['folder'];
       } else {
         folder_name =
-          stbundle.getLocalizedMessage("sndb.inbox.title")
+          this.stbundle.getLocalizedMessage("sndb.inbox.title")
           + getFileSeparator()
           + this.prefb.getCharPref("sender-distribution.condition.p_folder_name")
           + getFileSeparator() + folder['folder'];
