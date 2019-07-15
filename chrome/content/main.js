@@ -104,12 +104,12 @@ var senderDist = {
     var currDate = new Date();
     var timeMsg = "";
     var year  = currDate.getFullYear();
-    var month = zeroPadding(currDate.getMonth() + 1, 2);
-    var day   = zeroPadding(currDate.getDate(), 2);
-    var hour  = zeroPadding(currDate.getHours(), 2);
-    var min   = zeroPadding(currDate.getMinutes(), 2);
-    var sec   = zeroPadding(currDate.getSeconds(), 2);
-    var msec  = zeroPadding(currDate.getMilliseconds(), 3);
+    var month = this.zeroPadding(currDate.getMonth() + 1, 2);
+    var day   = this.zeroPadding(currDate.getDate(), 2);
+    var hour  = this.zeroPadding(currDate.getHours(), 2);
+    var min   = this.zeroPadding(currDate.getMinutes(), 2);
+    var sec   = this.zeroPadding(currDate.getSeconds(), 2);
+    var msec  = this.zeroPadding(currDate.getMilliseconds(), 3);
 
     if (pattern == 1) {
       // For logging time
