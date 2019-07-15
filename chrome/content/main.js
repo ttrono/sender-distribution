@@ -236,7 +236,7 @@ var senderDist = {
       // Get registered mail address from all servers,
       // then create inbox list to be processed.
       //
-      var servers = accountManager.allServers;
+      var servers = this.accountManager.allServers;
       if (servers == null || servers.length == 0) {
         // force finish if not exists inbox.
         alert(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
@@ -281,7 +281,7 @@ var senderDist = {
 
     var inboxFolder;
     try {
-      var servers = accountManager.allServers;
+      var servers = this.accountManager.allServers;
 
       // force finish if no server infomations.
       if (servers == null || servers.length == 0) {
