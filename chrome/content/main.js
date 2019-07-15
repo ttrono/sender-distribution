@@ -196,7 +196,7 @@ var senderDist = {
       this.inboxList= this.getAddressList();
       if (this.inboxList == null) {
         this.logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
-        forceFinish();
+        this.forceFinish();
       }
       var menulist = document.getElementById("inbox");
       for (var index = 0;index < this.inboxList.length;index++) {
@@ -215,7 +215,7 @@ var senderDist = {
     } catch(e) {
       this.logger.writeError("initScrCondition(): "+e);
       alert(e);
-      forceFinish();
+      this.forceFinish();
     }
     this.logger.writeDebug("end initScrCondition");
   },
