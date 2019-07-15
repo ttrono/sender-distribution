@@ -193,7 +193,7 @@ var senderDist = {
     this.logger.writeDebug("start initScrCondition");
     try {
       // create list of available mail addresses
-      this.inboxList= getAddressList();
+      this.inboxList= this.getAddressList();
       if (this.inboxList == null) {
         this.logger.writeWarn(this.stbundle.getLocalizedMessage("sndb.list.inbox.none"));
         forceFinish();
