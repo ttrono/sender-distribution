@@ -59,7 +59,7 @@ var senderDist = {
         // PR_WRONLY | PR_CREATE_FILE | PR_APPEND
         foStream.init(file, 0x02 | 0x08 | 0x10, 0664, 0);
 
-        this.RTNCD = getCRLF();
+        this.RTNCD = this.getCRLF();
         data = this.getTime(1) + " <" + level + "> " + data + this.RTNCD;
         foStream.write(data,data.length);
       } catch(e) {
