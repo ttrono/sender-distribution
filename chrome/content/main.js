@@ -63,7 +63,7 @@ var senderDist = {
         data = getTime(1) + " <" + level + "> " + data + RTNCD;
         foStream.write(data,data.length);
       } catch(e) {
-        if (isDebug) alert(e);
+        if (this.isDebug) alert(e);
       } finally {
         if (foStream != null) {
           foStream.close();
@@ -71,10 +71,10 @@ var senderDist = {
       }
     },
     writeDebug : function(data) {
-      if (isDebug) this.writeLog(LOG_DEBUG, data);
+      if (this.isDebug) this.writeLog(LOG_DEBUG, data);
     },
     writeInfo :  function(data) {
-      if (isDebug) this.writeLog(LOG_INFO, data);
+      if (this.isDebug) this.writeLog(LOG_INFO, data);
     },
     writeWarn :  function(data) {
       this.writeLog(LOG_WARN, data);
@@ -165,11 +165,11 @@ var senderDist = {
     }
 
     try {
-      isDebug = this.prefb.getIntPref("sender-distribution.debug");
+      this.isDebug = this.prefb.getIntPref("sender-distribution.debug");
     } catch(e) {
       // If undefined, set initial value
-      isDebug = false;
-      this.prefb.setIntPref("sender-distribution.debug", isDebug);
+      this.isDebug = false;
+      this.prefb.setIntPref("sender-distribution.debug", this.isDebug);
     }
 
     if (isRunning == null || isRunning == -1) {
@@ -548,7 +548,7 @@ var senderDist = {
           count++;
 
           // calculate progress rate in case of debug mode
-          if (isDebug) {
+          if (this.isDebug) {
             percentage = Math.round((count / mailcount) * 100);
             logger.writeDebug(
               "count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
@@ -1041,7 +1041,7 @@ var senderDist = {
         count++;
 
         // calculate progress rate in case of debug mode
-        if (isDebug) {
+        if (this.isDebug) {
           var percentage = (count / mailcount) * 100;
           logger.writeDebug("count=" + count + ", mailcount=" + mailcount + ", percentage=" + percentage);
         }
