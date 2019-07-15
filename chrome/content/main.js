@@ -51,7 +51,7 @@ var senderDist = {
       try {
         var file = Components.classes['@mozilla.org/file/local;1']
               .createInstance(Components.interfaces.nsIFile);
-        file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LOG);
+        file.initWithPath(this.propd.path + getFileSeparator() + this.FILENAME_LOG);
         if (!file.exists()) file.create(file.NORMAL_FILE_TYPE, 0666);
 
         foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
