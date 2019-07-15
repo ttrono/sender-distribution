@@ -27,9 +27,6 @@ var senderDist = {
   prefb: Components.classes["@mozilla.org/preferences-service;1"]
        .getService(Components.interfaces.nsIPrefBranch),
 
-  prefs: Components.classes["@mozilla.org/preferences-service;1"]
-       .getService(Components.interfaces.nsIPrefService),
-
   propd: Components.classes["@mozilla.org/file/directory_service;1"]
        .getService(Components.interfaces.nsIProperties)
        .get("ProfD", Components.interfaces.nsIFile),
