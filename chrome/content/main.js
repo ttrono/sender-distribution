@@ -621,7 +621,7 @@ var senderDist = {
       converterStream = Components
           .classes['@mozilla.org/intl/converter-output-stream;1']
           .createInstance(Components.interfaces.nsIConverterOutputStream);
-      converterStream.init(fileStream, CHARSET, 0,
+      converterStream.init(fileStream, this.CHARSET, 0,
           Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
       converterStream.writeString(
@@ -669,7 +669,7 @@ var senderDist = {
       converterStream = Components
           .classes['@mozilla.org/intl/converter-output-stream;1']
           .createInstance(Components.interfaces.nsIConverterOutputStream);
-      converterStream.init(fileStream, CHARSET, 0,
+      converterStream.init(fileStream, this.CHARSET, 0,
           Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
       converterStream.writeString("totalcount=" + mailcount + RTNCD);
 
@@ -766,7 +766,7 @@ var senderDist = {
       var ConverterInputStream = CC("@mozilla.org/intl/converter-input-stream;1",
                     "nsIConverterInputStream",
                     "init");
-      lis = new ConverterInputStream(fileStream, CHARSET, 1024, 0x0);
+      lis = new ConverterInputStream(fileStream, this.CHARSET, 1024, 0x0);
       lis.QueryInterface(Components.interfaces.nsIUnicharLineInputStream);
 
       var folders = new Array();
@@ -981,7 +981,7 @@ var senderDist = {
       var ConverterInputStream = CC("@mozilla.org/intl/converter-input-stream;1",
                     "nsIConverterInputStream",
                     "init");
-      lis = new ConverterInputStream(fileStream, CHARSET, 1024, 0x0);
+      lis = new ConverterInputStream(fileStream, this.CHARSET, 1024, 0x0);
       lis.QueryInterface(Components.interfaces.nsIUnicharLineInputStream);
 
       var count = 0;
