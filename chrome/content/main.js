@@ -59,8 +59,8 @@ var senderDist = {
         // PR_WRONLY | PR_CREATE_FILE | PR_APPEND
         foStream.init(file, 0x02 | 0x08 | 0x10, 0664, 0);
 
-        RTNCD = getCRLF();
-        data = getTime(1) + " <" + level + "> " + data + RTNCD;
+        this.RTNCD = getCRLF();
+        data = getTime(1) + " <" + level + "> " + data + this.RTNCD;
         foStream.write(data,data.length);
       } catch(e) {
         if (this.isDebug) alert(e);
@@ -625,7 +625,7 @@ var senderDist = {
           Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
       converterStream.writeString(
-        retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + RTNCD);
+        retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + this.RTNCD);
     } catch(e) {
       this.logger.writeError("outputDistibutionListFile(): " + e);
       throw e;
@@ -671,12 +671,12 @@ var senderDist = {
           .createInstance(Components.interfaces.nsIConverterOutputStream);
       converterStream.init(fileStream, this.CHARSET, 0,
           Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
-      converterStream.writeString("totalcount=" + mailcount + RTNCD);
+      converterStream.writeString("totalcount=" + mailcount + this.RTNCD);
 
       for (var index=0;index<manageAry.length;index++) {
         // a count of mail per mail address
-        converterStream.writeString("folder=" + manageAry[index]['author'] + RTNCD);
-        converterStream.writeString("count=" + manageAry[index]['count'] + RTNCD);
+        converterStream.writeString("folder=" + manageAry[index]['author'] + this.RTNCD);
+        converterStream.writeString("count=" + manageAry[index]['count'] + this.RTNCD);
       }
     } catch(e) {
       this.logger.writeError("outputDistibutionManagerFile(): " + e);
