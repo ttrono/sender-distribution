@@ -51,7 +51,7 @@ var senderDist = {
       try {
         var file = Components.classes['@mozilla.org/file/local;1']
               .createInstance(Components.interfaces.nsIFile);
-        file.initWithPath(propd.path + getFileSeparator() + FILENAME_LOG);
+        file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LOG);
         if (!file.exists()) file.create(file.NORMAL_FILE_TYPE, 0666);
 
         foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
@@ -583,10 +583,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(propd.path + getFileSeparator() + FILENAME_LIST);
+      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LIST);
       if (file.exists()) {
         file.remove(false);
-        logger.writeInfo("deleted " + propd.path + getFileSeparator() + FILENAME_LIST);
+        logger.writeInfo("deleted " + this.propd.path + getFileSeparator() + FILENAME_LIST);
       }
     } catch(e) {
       logger.writeError("deleteDistibutionListFile(): " + e);
@@ -608,10 +608,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(propd.path + getFileSeparator() + FILENAME_LIST);
+      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LIST);
       if (!file.exists()) {
         file.create(file.NORMAL_FILE_TYPE, 0666);
-        logger.writeInfo("created "+ propd.path + getFileSeparator() + FILENAME_LIST);
+        logger.writeInfo("created "+ this.propd.path + getFileSeparator() + FILENAME_LIST);
       }
       fileStream = Components
           .classes['@mozilla.org/network/file-output-stream;1']
@@ -652,10 +652,10 @@ var senderDist = {
       var file = Components
           .classes['@mozilla.org/file/local;1']
           .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(propd.path + getFileSeparator() + FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_MANAGER);
       if (file.exists()) {
         file.remove(false);
-        logger.writeInfo("delete " + propd.path + getFileSeparator() + FILENAME_MANAGER);
+        logger.writeInfo("delete " + this.propd.path + getFileSeparator() + FILENAME_MANAGER);
       }
       file.create(file.NORMAL_FILE_TYPE, 0666);
 
@@ -755,7 +755,7 @@ var senderDist = {
       var file = Components
         .classes['@mozilla.org/file/local;1']
         .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(propd.path + getFileSeparator() + FILENAME_MANAGER);
+      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_MANAGER);
 
       fileStream = Components
           .classes['@mozilla.org/network/file-input-stream;1']
@@ -970,7 +970,7 @@ var senderDist = {
       var file = Components
         .classes['@mozilla.org/file/local;1']
         .createInstance(Components.interfaces.nsIFile);
-      file.initWithPath(propd.path + getFileSeparator() + FILENAME_LIST);
+      file.initWithPath(this.propd.path + getFileSeparator() + FILENAME_LIST);
 
       fileStream = Components
         .classes['@mozilla.org/network/file-input-stream;1']
