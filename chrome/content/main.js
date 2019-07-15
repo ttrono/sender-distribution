@@ -458,7 +458,7 @@ var senderDist = {
     try {
       var p_inbox   = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
       var p_status  = this.prefb.getIntPref("sender-distribution.condition.p_status");
-      var inboxFolder = getInboxFolderByIndex(p_inbox);
+      var inboxFolder = this.getInboxFolderByIndex(p_inbox);
 
       if (p_status == 1) {
         mailcount = inboxFolder.getNumUnread(false);
