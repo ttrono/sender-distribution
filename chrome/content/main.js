@@ -516,7 +516,7 @@ var senderDist = {
       var manageAry = new Array();
       var p_inbox = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
       var p_status =this.prefb.getIntPref("sender-distribution.condition.p_status");
-      inboxFolder = getInboxFolderByIndex(p_inbox);
+      inboxFolder = this.getInboxFolderByIndex(p_inbox);
       database = inboxFolder.msgDatabase;
       var enumerator = database.EnumerateMessages();
 
@@ -704,7 +704,7 @@ var senderDist = {
     try {
       var p_inbox = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
       var p_status =this.prefb.getIntPref("sender-distribution.condition.p_status");
-      inboxFolder = getInboxFolderByIndex(p_inbox);
+      inboxFolder = this.getInboxFolderByIndex(p_inbox);
       database = inboxFolder.msgDatabase;
       var enumerator = database.EnumerateMessages();
 
@@ -988,7 +988,7 @@ var senderDist = {
       var count = 0;
       var out = {value: ""};
       var srcFolder =
-        getInboxFolderByIndex(this.prefb.getIntPref("sender-distribution.condition.p_inbox"));
+        this.getInboxFolderByIndex(this.prefb.getIntPref("sender-distribution.condition.p_inbox"));
       this.logger.writeDebug("srcFolder.URI=" + srcFolder.URI);
 
       // prepare api for mail copy(or move)
