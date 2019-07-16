@@ -11,7 +11,7 @@
 				key="key_senderdist"
 				class="menuitem-iconic"
 				insertafter="applyFiltersToSelection"
-				oncommand="openScrCondition();" />
+				oncommand="senderDist.openScrCondition();" />
 	</menupopup>
 	<script type="application/javascript" src="chrome://messenger/content/mailCommands.js"/>
 	<script type="application/javascript" src="chrome://sender-distribution/content/main.js"/>

@@ -11,9 +11,9 @@
 	id="condition"
 	title="&sndb.window.title;"
 	buttons=","
-	ondialogaccept="checkCondition();"
-	onload="initScrCondition();"
-	onunload="resetProp();"
+	ondialogaccept="senderDist.checkCondition();"
+	onload="senderDist.initScrCondition();"
+	onunload="senderDist.resetProp();"
 	style="width: 750px; height: 520px;">
 
 	<prefpane id="firstpane">
@@ -25,7 +25,7 @@
 					</menupopup>
 				</menulist>
 				<spacer flex="1" />
-				<button type="button" id="bt_prepare" name="bt_prepare" value="1" oncommand="checkCondition()" label="&sndb.btn.prepare;"/>
+				<button type="button" id="bt_prepare" name="bt_prepare" value="1" oncommand="senderDist.checkCondition()" label="&sndb.btn.prepare;"/>
 			</hbox>
 			<hbox align="center">
 				<label value="&sndb.method.title;"/>
@@ -60,12 +60,12 @@
 				<label value="&sndb.info.addrcount;" />
 				<label id="distinfo" value="-/-" />
 				<spacer flex="1" />
-				<button type="button" id="bt_recount" name="bt_recount" oncommand="recountTargetMail()" label="&sndb.btn.recount;"/>
+				<button type="button" id="bt_recount" name="bt_recount" oncommand="senderDist.recountTargetMail()" label="&sndb.btn.recount;"/>
 			</hbox>
 			<hbox align="center">
 			<tree id="MailAddrListBox" flex="1" rows="12" editable="true">
 				<treecols>
-					<treecol id="chk" type="checkbox" editable="true" width="22" fixed="true" onclick="changeAllCheckboxStatus();" />
+					<treecol id="chk" type="checkbox" editable="true" width="22" fixed="true" onclick="senderDist.changeAllCheckboxStatus();" />
 					<treecol id="addr" label="&sndb.detail.addr;" width="300" fixed="false"/>
 					<splitter class="tree-splitter" />
 					<treecol id="count" label="&sndb.detail.count;" width="70" fixed="true" style="text-align: right" tooltiptext="&sndb.detail.count;"/>
@@ -77,7 +77,7 @@
 			</tree>
 			</hbox>
 			<hbox>
-				<button type="button" id="bt_execute" name="bt_execute" value="1" oncommand="executeDistribution()" label="&sndb.btn.execute;"/>
+				<button type="button" id="bt_execute" name="bt_execute" value="1" oncommand="senderDist.executeDistribution()" label="&sndb.btn.execute;"/>
 				<spacer flex="1" />
 				<button type="button" id="bt_finish" name="bt_finish" value="2" oncommand="window.close()" label="&sndb.btn.finish;"/>
 			</hbox>
