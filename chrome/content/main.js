@@ -426,7 +426,7 @@ var senderDist = {
 
       var btnExec = document.getElementById("bt_execute");
       var btnRecnt = document.getElementById("bt_recount");
-      var distInfo = getDistibutionInfo();
+      var distInfo = this.getDistibutionInfo();
       if (distInfo.length > 0) {
         showDistibutionInfoList(distInfo);
 
