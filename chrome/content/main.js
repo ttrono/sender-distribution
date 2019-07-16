@@ -844,7 +844,7 @@ var senderDist = {
     var managerAry = null;
     try {
       // reconfirm a count of selected mail address
-      managerAry = readDistibutionManagerFile();
+      managerAry = this.readDistibutionManagerFile();
       if (managerAry.length == 0) {
         this.logger.writeWarn("there are no mail by selected conditions.");
         alert(this.stbundle.getLocalizedMessage("sndb.info.nomail"));
