@@ -872,7 +872,7 @@ var senderDist = {
       // append distributions to treeitem
       for(var index = 0;index < managerAry.length;index++) {
         var folder = managerAry[index];
-        appendDistributionListItem(index, folder);
+        this.appendDistributionListItem(index, folder);
       }
     } catch(e) {
       this.logger.writeError("showDistibutionInfoList(): " + e);
