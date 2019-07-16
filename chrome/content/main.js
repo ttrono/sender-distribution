@@ -512,7 +512,7 @@ var senderDist = {
     var database;
 
     try {
-      var mailcount = getMailCount();
+      var mailcount = this.getMailCount();
       var manageAry = new Array();
       var p_inbox = this.prefb.getIntPref("sender-distribution.condition.p_inbox");
       var p_status =this.prefb.getIntPref("sender-distribution.condition.p_status");
@@ -865,7 +865,7 @@ var senderDist = {
     this.logger.writeDebug("start showDistibutionInfoList");
 
     try {
-      var mailcount = getMailCount();
+      var mailcount = this.getMailCount();
       var distinfo = document.getElementById("distinfo");
       distinfo.setAttribute("value", managerAry.length + "/" + mailcount);
 
