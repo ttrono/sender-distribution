@@ -394,7 +394,7 @@ var senderDist = {
         this.prefb.setIntPref("sender-distribution.condition.p_edit_status", 0);
         document.getElementById("bt_recount").setAttribute("disabled", true);
         document.getElementById("bt_execute").setAttribute("disabled", true);
-        clearListItems();
+        this.clearListItems();
         document.getElementById("distinfo").setAttribute("value", "-/-");
       }
       document.getElementById("bt_prepare").setAttribute("label", bt_prepare_label);
