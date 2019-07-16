@@ -560,7 +560,7 @@ var senderDist = {
       this.prefb.setIntPref("sender-distribution.condition.mailcount", mailcount);
 
       // output mail information to a manager file.
-      outputDistibutionManagerFile(manageAry, mailcount);
+      this.outputDistibutionManagerFile(manageAry, mailcount);
 
       var p_folder = this.prefb.getIntPref("sender-distribution.condition.p_folder");
       if (p_folder == 2) {
