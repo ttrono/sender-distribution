@@ -422,7 +422,7 @@ var senderDist = {
         this.changeConditionBtn(true);
       }
 
-      createDistibutionManageInfo();
+      this.createDistibutionManageInfo();
 
       var btnExec = document.getElementById("bt_execute");
       var btnRecnt = document.getElementById("bt_recount");
