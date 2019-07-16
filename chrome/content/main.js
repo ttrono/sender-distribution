@@ -1241,7 +1241,7 @@ var senderDist = {
 
   forceFinish : function() {
     this.logger.writeDebug("start forceFinish");
-    resetProp();
+    this.resetProp();
     this.logger.writeDebug("end forceFinish");
     window.close();
   }
