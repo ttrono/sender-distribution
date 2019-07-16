@@ -369,7 +369,7 @@ var senderDist = {
       this.prefb.setIntPref("sender-distribution.condition.p_method", p_method);
       this.prefb.setIntPref("sender-distribution.condition.p_edit_status", 1);
 
-      prepareDistribution();
+      this.prepareDistribution();
     } catch(e) {
       this.logger.writeError("checkCondition(): " + e);
       alert(e);
