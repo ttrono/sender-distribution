@@ -730,7 +730,7 @@ var senderDist = {
           if (isMatch == false) {
             continue;
           }
-          outputDistibutionListFile(header);
+          this.outputDistibutionListFile(header);
         }
       }
     } catch(e) {
