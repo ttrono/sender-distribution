@@ -862,7 +862,7 @@ var senderDist = {
    * show distribution infomation(main number and mail list).
    */
   showDistibutionInfoList : function(managerAry) {
-    this.logger.writeDebug("start showDistibutionInfo");
+    this.logger.writeDebug("start showDistibutionInfoList");
 
     try {
       var mailcount = getMailCount();
@@ -875,9 +875,10 @@ var senderDist = {
         appendDistributionListItem(index, folder);
       }
     } catch(e) {
-      this.logger.writeError("showDistibutionInfo(): " + e);
+      this.logger.writeError("showDistibutionInfoList(): " + e);
       throw e;
     }
+    this.logger.writeDebug("end showDistibutionInfoList");
     return;
   },
 
