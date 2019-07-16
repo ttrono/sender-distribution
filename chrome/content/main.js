@@ -530,7 +530,7 @@ var senderDist = {
           if ((p_status == 1 && header.isRead == true) || (p_status == 2 && header.isRead == false))
             continue;
           var isMatch = false;
-          var author = retrieveMadr(header.mime2DecodedAuthor);
+          var author = this.retrieveMadr(header.mime2DecodedAuthor);
 
           for (var index = 0;index < manageAry.length;index++) {
             if (manageAry[index]['author'] == author) {
@@ -625,7 +625,7 @@ var senderDist = {
           Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
 
       converterStream.writeString(
-        retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + this.RTNCD);
+        this.retrieveMadr(header.mime2DecodedAuthor) + "," + header.messageId + this.RTNCD);
     } catch(e) {
       this.logger.writeError("outputDistibutionListFile(): " + e);
       throw e;
@@ -719,7 +719,7 @@ var senderDist = {
           if ((p_status == 1 && header.isRead == true) || (p_status == 2 && header.isRead == false))
             continue;
           var isMatch = false;
-          var author = retrieveMadr(header.mime2DecodedAuthor);
+          var author = this.retrieveMadr(header.mime2DecodedAuthor);
 
           for (var index = 0;index < manageAry.length;index++) {
             if (manageAry[index] == author) {
