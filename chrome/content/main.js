@@ -1080,7 +1080,7 @@ var senderDist = {
       }
 
       createDistibutionListInfo(mailAddrAry);
-      doDistribution();
+      this.doDistribution();
 
       // erase distribution infomations, and initialize condition.
       this.changeConditionBtn(false);
