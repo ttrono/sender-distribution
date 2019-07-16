@@ -1079,7 +1079,7 @@ var senderDist = {
         return;
       }
 
-      createDistibutionListInfo(mailAddrAry);
+      this.createDistibutionListInfo(mailAddrAry);
       this.doDistribution();
 
       // erase distribution infomations, and initialize condition.
