@@ -1073,7 +1073,7 @@ var senderDist = {
 
     try {
       // get number of checked mail address
-      var mailAddrAry = getTargetMailAddress();
+      var mailAddrAry = this.getTargetMailAddress();
       if (mailAddrAry.length == 0) {
         alert(this.stbundle.getLocalizedMessage("sndb.noselect"));
         return;
