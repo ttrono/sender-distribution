@@ -316,7 +316,7 @@ var senderDist = {
       try {
         var p_edit_status = this.prefb.getIntPref("sender-distribution.condition.p_edit_status");
         if (p_edit_status != null && p_edit_status == 1) {
-          changeConditionBtn(false);
+          this.changeConditionBtn(false);
           return;
         }
       } catch(e) {
@@ -419,7 +419,7 @@ var senderDist = {
 
     try {
       if (this.prefb.getIntPref("sender-distribution.condition.p_edit_status") == 1) {
-        changeConditionBtn(true);
+        this.changeConditionBtn(true);
       }
 
       createDistibutionManageInfo();
@@ -438,7 +438,7 @@ var senderDist = {
         // reinput conditions if target mail is nothing.
         btnExec.setAttribute("disabled", true);
         btnRecnt.setAttribute("disabled", true);
-        changeConditionBtn(false);
+        this.changeConditionBtn(false);
       }
     } catch(e) {
       this.logger.writeError("prepareDistribution(): " + e);
@@ -1082,7 +1082,7 @@ var senderDist = {
       doDistribution();
 
       // erase distribution infomations, and initialize condition.
-      changeConditionBtn(false);
+      this.changeConditionBtn(false);
     } catch(e) {
       this.logger.writeError("executeDistribution(): " + e);
       this.forceFinish();
