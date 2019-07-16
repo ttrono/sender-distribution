@@ -521,7 +521,7 @@ var senderDist = {
       var enumerator = database.EnumerateMessages();
 
       // delete existing list file.
-      deleteDistibutionListFile();
+      this.deleteDistibutionListFile();
 
       // retrieve sender address from mail header.
       while (enumerator.hasMoreElements()) {
