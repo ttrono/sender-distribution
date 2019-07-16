@@ -897,7 +897,7 @@ var senderDist = {
         "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "treerow");
 
       for (var idx = 0;idx < rows.length;idx++) {
-        var chkValue = toBoolean(rows[idx].children[0].getAttribute('value'));
+        var chkValue = this.toBoolean(rows[idx].children[0].getAttribute('value'));
 
         if (chkValue) {
           var cell = document.getElementById("mailaddr-" + idx);
@@ -929,7 +929,7 @@ var senderDist = {
 
       for (var idx = 0;idx < rows.length;idx++) {
         // get a checkbox value of first record
-        var chkValue = toBoolean(rows[idx].children[0].getAttribute('value'));
+        var chkValue = this.toBoolean(rows[idx].children[0].getAttribute('value'));
         this.logger.writeDebug("idx/value=" + idx + "/" + chkValue + "(" + typeof(chkValue) + ")");
 
         if (chkValue) {
