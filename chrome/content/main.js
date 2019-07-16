@@ -428,7 +428,7 @@ var senderDist = {
       var btnRecnt = document.getElementById("bt_recount");
       var distInfo = this.getDistibutionInfo();
       if (distInfo.length > 0) {
-        showDistibutionInfoList(distInfo);
+        this.showDistibutionInfoList(distInfo);
 
         // enable distribution button
         btnExec.setAttribute("disabled", false);
